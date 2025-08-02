@@ -1,0 +1,25 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+  }
+  
+  .search-bar {
+    display: flex;
+    background-color: var(--mui-primary-400); /* You may need to inject theme colors manually */
+    border-radius: 3px;
+  }
+  
+  .search-input {
+    margin-left: 8px;
+    flex: 1;
+  }
+  
+  .search-button {
+    padding: 8px;
+  }
+  
+  .icon-group {
+    display: flex;
+  }
+  
