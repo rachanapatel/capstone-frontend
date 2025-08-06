@@ -18,7 +18,7 @@
 
 
 import { useTheme } from "@mui/material";
-import { useContext } from "react";
+// import { useContext } from "react";
 import "./Header.css";
 import { Box, IconButton, InputBase,} from "@mui/material";
 // import {
@@ -41,12 +41,12 @@ const Header = () => {
   return (
     <Box className="header">
       {/* SEARCH BAR */}
-      <Box className="search-bar">
+      {/* <Box className="search-bar">
         <InputBase className="search-input" placeholder="Search" />
         <IconButton type="button" className="search-button">
           <SearchIcon />
         </IconButton>
-      </Box>
+      </Box> */}
 
       {/* ICONS */}
       <Box className="icon-group">

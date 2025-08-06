@@ -1,0 +1,76 @@
+.sidebar .pro-sidebar-inner {
+    background: var(--sidebar-bg) !important;
+  }
+  
+  .sidebar .pro-icon-wrapper {
+    background-color: transparent !important;
+  }
+  
+  .sidebar .pro-inner-item {
+    padding: 5px 35px 5px 20px !important;
+  }
+  
+  .sidebar .pro-inner-item:hover {
+    color: #868dfb !important;
+  }
+  
+  .sidebar .pro-menu-item.active {
+    color: #6870fa !important;
+  }
+  
+  .menu-toggle {
+    margin: 10px 0 20px 0;
+    color: var(--text-color);
+  }
+  
+  .menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 15px;
+  }
+  
+  .menu-title {
+    color: var(--text-color);
+  }
+  
+  .user-info {
+    margin-bottom: 25px;
+  }
+  
+  .user-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .profile-pic {
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+  
+  .user-text {
+    text-align: center;
+  }
+  
+  .username {
+    color: var(--text-color);
+    font-weight: bold;
+    margin: 10px 0 0 0;
+  }
+  
+  .user-role {
+    color: var(--accent-color);
+  }
+  
+  .menu-section {
+    padding-left: 10%;
+  }
+  
+  .section-title {
+    color: var(--text-secondary);
+    margin: 15px 0 5px 20px;
+  }
+  

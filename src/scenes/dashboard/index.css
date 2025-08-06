@@ -1,0 +1,54 @@
+/* Calendar.css */
+
+.calendar-container {
+    margin: 20px;
+  }
+  
+  .calendar-sidebar {
+    flex: 1 1 20%;
+    /* background-color: var(--primary-color); */
+    background-color: #f2f0f0;
+    padding: 15px;
+    border-radius: 4px;
+  }
+  
+  .calendar-sidebar-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  .calendar-event-item {
+    /* background-color: var(--green-accent); */
+    background-color: #4cceac;
+    margin: 10px 0;
+    border-radius: 2px;
+  }
+  
+  .calendar-event-text {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .calendar-calendar-container {
+    flex: 1 1 100%;
+    margin-left: 15px;
+  }
+  
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .calendar-header-left {
+    padding: 10px;
+  }
+  
+  .calendar-header-center {
+    font-size: 1.5rem;
+  }
+  
+  .calendar-header-right {
+    padding: 10px;
+  }
+  
+  

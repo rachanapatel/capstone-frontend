@@ -1,0 +1,20 @@
+/* Header.css */
+:root {
+    --header-title-color: #e0e0e0; /* Default grey[100] color from the theme */
+    --header-subtitle-color: #3da58a; /* Default greenAccent[400] color from the theme */
+  }
+  
+  .header-container {
+    margin-bottom: 30px;
+  }
+  
+  .header-title {
+    margin: 0 0 5px 0;
+    font-weight: bold;
+    color: var(--header-title-color); /* Use CSS variable for dynamic color */
+  }
+  
+  .header-subtitle {
+    color: var(--header-subtitle-color); /* Use CSS variable for dynamic color */
+  }
+  
