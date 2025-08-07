@@ -1,130 +1,3 @@
-// const Dashboard = () => {
-//     return <div>Dashboard</div>
-
-// };
-
-// export default Dashboard;
-
-
-// import { useState } from "react";
-// import FullCalendar from "@fullcalendar/react";
-// import { formatDate } from '@fullcalendar/core';
-// import dayGridPlugin from "@fullcalendar/daygrid";
-// import timeGridPlugin from "@fullcalendar/timegrid";
-// import interactionPlugin from "@fullcalendar/interaction";
-// import listPlugin from "@fullcalendar/list";
-// import { Box, List, ListItem, ListItemText, Typography, useTheme } from "@mui/material";
-// import Pagetitles from "../../Pagetitles";
-// import Header from "../global/header";
-// // import { tokens } from "../../theme";
-
-// // Import the CSS file
-// // import './Calendar.css';
-// import './index.css';
-
-// const Dashboard = () => {
-//   const theme = useTheme();
-// //   const colors = tokens(theme.palette.mode);
-//   const [currentEvents, setCurrentEvents] = useState([]);
-
-//   const handleDateClick = (selected) => {
-//     const title = prompt("Please enter a new title for your event");
-//     const calendarApi = selected.view.calendar;
-//     calendarApi.unselect();
-
-//     if (title) {
-//       calendarApi.addEvent({
-//         id: `${selected.dateStr}-${title}`,
-//         title,
-//         start: selected.startStr,
-//         end: selected.endStr,
-//         allDay: selected.allDay,
-//       });
-//     }
-//   };
-
-//   const handleEventClick = (selected) => {
-//     if (
-//       window.confirm(
-//         `Are you sure you want to delete the event '${selected.event.title}'`
-//       )
-//     ) {
-//       selected.event.remove();
-//     }
-//   };
-
-//   return (
-//     <Box className="calendar-container">
-//       <Pagetitles title="Dashboard" subtitle="Full Calendar Interactive Page" />
-
-//       <Box className="calendar-header">
-//         {/* CALENDAR SIDEBAR */}
-//         <Box className="calendar-sidebar" style={{ backgroundColor: colors.primary[400] }}>
-//           <Typography className="calendar-sidebar-title">Events</Typography>
-//           <List>
-//             {currentEvents.map((event) => (
-//               <ListItem key={event.id} className="calendar-event-item" style={{ backgroundColor: colors.greenAccent[500] }}>
-//                 <ListItemText
-//                   primary={event.title}
-//                   secondary={
-//                     <Typography>
-//                       {formatDate(event.start, {
-//                         year: "numeric",
-//                         month: "short",
-//                         day: "numeric",
-//                       })}
-//                     </Typography>
-//                   }
-//                 />
-//               </ListItem>
-//             ))}
-//           </List>
-//         </Box>
-
-//         {/* CALENDAR */}
-//         <Box className="calendar-calendar-container">
-//           <FullCalendar
-//             height="75vh"
-//             plugins={[
-//               dayGridPlugin,
-//               timeGridPlugin,
-//               interactionPlugin,
-//               listPlugin,
-//             ]}
-//             headerToolbar={{
-//               left: "prev,next today",
-//               center: "title",
-//               right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
-//             }}
-//             initialView="dayGridMonth"
-//             editable={true}
-//             selectable={true}
-//             selectMirror={true}
-//             dayMaxEvents={true}
-//             select={handleDateClick}
-//             eventClick={handleEventClick}
-//             eventsSet={(events) => setCurrentEvents(events)}
-//             // initialEvents={[
-//             //   {
-//             //     id: "12315",
-//             //     title: "All-day event",
-//             //     date: "2022-09-14",
-//             //   },
-//             //   {
-//             //     id: "5123",
-//             //     title: "Timed event",
-//             //     date: "2022-09-28",
-//             //   },
-//             // ]}
-//           />
-//         </Box>
-//       </Box>
-//     </Box>
-//   );
-// };
-
-// export default Dashboard;
-
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -226,17 +99,6 @@ import Header from "../global/header";
 import './index.css';
 
 
-// import { useState } from "react";
-// import FullCalendar, { formatDate } from "@fullcalendar/react";
-// import dayGridPlugin from "@fullcalendar/daygrid";
-// import timeGridPlugin from "@fullcalendar/timegrid";
-// import interactionPlugin from "@fullcalendar/interaction";
-// import listPlugin from "@fullcalendar/list";
-// import { Box, List, ListItem, ListItemText, Typography } from "@mui/material";
-// import Header from "../../components/Header";
-// import './Calendar.css'; // Import CSS file
-
-
 
 const Dashboard = () => {
   const [currentEvents, setCurrentEvents] = useState([]);
@@ -247,12 +109,6 @@ const Dashboard = () => {
     setSelectedDateInfo(selected); // Store the clicked date info
     setShowForm(true);             // Show the form
   };
-  
-  // const handleDateClick = (selected) => {
-  //   const title = prompt("Please enter a new title for your event");
-  //   const calendarApi = selected.view.calendar;
-  //   calendarApi.unselect();
-
 
   const handleCreateEvent = (formData) => {
     const calendarApi = selectedDateInfo.view.calendar;
@@ -270,20 +126,6 @@ const Dashboard = () => {
     });
   };
   
-
-
-
-
-  //   if (title) {
-  //     calendarApi.addEvent({
-  //       id: `${selected.dateStr}-${title}`,
-  //       title,
-  //       start: selected.startStr,
-  //       end: selected.endStr,
-  //       allDay: selected.allDay,
-  //     });
-  //   }
-  // };
 
   const handleEventClick = (selected) => {
     if (

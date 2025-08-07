@@ -48,7 +48,7 @@ const Sidebar = () => {
             {!isCollapsed && (
               <Box className="menu-header">
                 <Typography variant="h3" className="menu-title">
-                  Menu
+                  MENU
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
@@ -87,7 +87,7 @@ const Sidebar = () => {
             />
 
             <Typography variant="h6" className="section-title">
-              Team Management
+              TEAM
             </Typography>
             <Item title="Manage Team" to="/team" icon={<PeopleOutlinedIcon />} selected={selected} setSelected={setSelected} />
             <Item title="Contacts Information" to="/contacts" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />
@@ -95,7 +95,7 @@ const Sidebar = () => {
             <Item title="New Member" to="/form" icon={<PersonOutlinedIcon />} selected={selected} setSelected={setSelected} />
 
             <Typography variant="h6" className="section-title">
-              Templates
+              PLAN
             </Typography>
             
             <Item title="View Templates" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} />
