@@ -153,13 +153,20 @@ function ShiftForm() {
           recurring: false,
         }}
         validationSchema={validationSchema}
-        onSubmit={(values, { setSubmitting, resetForm }) => {
-          setTimeout(() => {
-            alert(`Form Submitted:\n${JSON.stringify(values, null, 2)}`);
-            setSubmitting(false);
-            resetForm();
-          }, 500);
+        // onSubmit={(values, { setSubmitting, resetForm }) => {
+        //   setTimeout(() => {
+        //     alert(`Form Submitted:\n${JSON.stringify(values, null, 2)}`);
+        //     setSubmitting(false);
+        //     resetForm();
+        //   }, 500);
+        // }}
+
+        onSubmit={(values) => {
+          onCreate(values); // 🔁 pass values back to parent
+          onClose();        // hide the form
         }}
+
+
       >
         {({ isSubmitting }) => (
           <Form>
@@ -231,38 +238,52 @@ import './index.css';
 
 
 
-// class Shift(models.Model):
-//     shift_status_options = {"prop": "Proposed", 
-//                       "acc": "Accepted", 
-//                       "pref": "Preferred", 
-//                       "rej" : "Rejected"}
-//     duration = models.DurationField()
-//     starttime = models.DateTimeField()
-//     status = models.CharField(choices=shift_status_options, default="prop")
-//     recurring = models.BooleanField(default=False)
-// # deleting a position deletes associated shifts BUT deleting an employee just sets the employee to null (bc its optional)
-//     employee = models.ForeignKey(Employee, related_name='shifts', on_delete=models.SET_NULL, null=True, blank=True)
-//     position = models.ForeignKey(Position, related_name='shifts', on_delete=models.CASCADE) 
-
-
 const Dashboard = () => {
   const [currentEvents, setCurrentEvents] = useState([]);
-
+  const [showForm, setShowForm] = useState(false);
+  const [selectedDateInfo, setSelectedDateInfo] = useState(null);
+  
   const handleDateClick = (selected) => {
-    const title = prompt("Please enter a new title for your event");
-    const calendarApi = selected.view.calendar;
-    calendarApi.unselect();
-
-    if (title) {
-      calendarApi.addEvent({
-        id: `${selected.dateStr}-${title}`,
-        title,
-        start: selected.startStr,
-        end: selected.endStr,
-        allDay: selected.allDay,
-      });
-    }
+    setSelectedDateInfo(selected); // Store the clicked date info
+    setShowForm(true);             // Show the form
   };
+  
+  // const handleDateClick = (selected) => {
+  //   const title = prompt("Please enter a new title for your event");
+  //   const calendarApi = selected.view.calendar;
+  //   calendarApi.unselect();
+
+
+  const handleCreateEvent = (formData) => {
+    const calendarApi = selectedDateInfo.view.calendar;
+  
+    calendarApi.unselect(); // clear selection
+  
+    calendarApi.addEvent({
+      id: `${selectedDateInfo.dateStr}-${formData.title}`,
+      title: formData.title,
+      description: formData.description,
+      category: formData.category,
+      start: selectedDateInfo.startStr,
+      end: selectedDateInfo.endStr,
+      allDay: selectedDateInfo.allDay,
+    });
+  };
+  
+
+
+
+
+  //   if (title) {
+  //     calendarApi.addEvent({
+  //       id: `${selected.dateStr}-${title}`,
+  //       title,
+  //       start: selected.startStr,
+  //       end: selected.endStr,
+  //       allDay: selected.allDay,
+  //     });
+  //   }
+  // };
 
   const handleEventClick = (selected) => {
     if (
@@ -325,6 +346,15 @@ const Dashboard = () => {
             //   { id: "5123", title: "Timed event", date: "2022-09-28" },
             // ]}
           />
+          {showForm && selectedDateInfo && (
+            <ShiftForm
+              dateInfo={selectedDateInfo}
+              onClose={() => setShowForm(false)}
+              onCreate={handleCreateEvent}
+            />
+          )}
+
+
         </Box>
       </Box>
     </Box>

@@ -1,12 +1,3 @@
-// const Sidebar = () => {
-//     const theme = useTheme();
-//     return (<div>Sidebar</div>)
-
-// };
-
-// export default Sidebar;
-
-
 import { useState } from "react";
 // import { useTheme } from "@mui/material";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
