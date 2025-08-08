@@ -2,6 +2,25 @@ import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
+import { useState } from "react";
+import FullCalendar from "@fullcalendar/react";
+import { formatDate } from '@fullcalendar/core';
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import listPlugin from "@fullcalendar/list";
+import { Box, List, ListItem, ListItemText, Typography, useTheme } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+} from "@mui/material";
+import Pagetitles from "../../Pagetitles";
+import Header from "../global/header";
+import './index.css';
+
 // ✅ Yup validation schema
 const validationSchema = Yup.object({
   position: Yup.string()
@@ -14,89 +33,57 @@ const validationSchema = Yup.object({
     // .oneOf([true], 'You must accept the terms'),
 });
 
-function ShiftForm() {
+
+function ShiftForm({ onClose, onCreate }) {
   return (
-    <div style={{ maxWidth: '400px', margin: '0 auto' }}>
-      <h2>Shift Form</h2>
-      <Formik
-        initialValues={{
-          position: '',
-          employee: '',
-          shift_status: '',
-          recurring: false,
-        }}
-        validationSchema={validationSchema}
-        // onSubmit={(values, { setSubmitting, resetForm }) => {
-        //   setTimeout(() => {
-        //     alert(`Form Submitted:\n${JSON.stringify(values, null, 2)}`);
-        //     setSubmitting(false);
-        //     resetForm();
-        //   }, 500);
-        // }}
-
-        onSubmit={(values) => {
-          onCreate(values); // 🔁 pass values back to parent
-          onClose();        // hide the form
-        }}
-
-
-      >
-        {({ isSubmitting }) => (
+    <Dialog open={true} onClose={onClose}>
+      <DialogTitle>Create Shift</DialogTitle>
+      <DialogContent dividers>
+        <Formik
+          initialValues={{
+            position: '',
+            employee: '',
+            shift_status: '',
+            recurring: false,
+          }}
+          validationSchema={validationSchema}
+          onSubmit={(values) => {
+            onCreate(values); // Pass data back
+            onClose();        // Close modal
+          }}
+        >
           <Form>
-
             <div>
               <label htmlFor="position">Position:</label>
               <Field type="text" name="position" />
               <ErrorMessage name="position" component="div" style={{ color: 'red' }} />
             </div>
-
             <div>
               <label htmlFor="shift-status">Shift Status:</label>
               <Field type="text" name="email" />
               <ErrorMessage name="shift-status" component="div" style={{ color: 'red' }} />
             </div>
-
             <div>
               <label htmlFor="employee">Employee:</label>
               <Field type="text" name="employee" />
-              {/* <ErrorMessage name="password" component="div" style={{ color: 'red' }} /> */}
             </div>
-
             <div>
               <label>
                 <Field type="checkbox" name="recurring" />
                 Recurring shift
               </label>
               <ErrorMessage name="recurring" component="div" style={{ color: 'red' }} />
-            </div>
-
-            <button type="submit" disabled={isSubmitting}>
-              Submit
-            </button>
-
+            </div>            
+            <DialogActions>
+              <Button onClick={onClose}>Cancel</Button>
+              <Button type="submit" variant="contained">Save</Button>
+            </DialogActions>
           </Form>
-        )}
-      </Formik>
-    </div>
+        </Formik>
+      </DialogContent>
+    </Dialog>
   );
 }
-
-// export default ShiftForm;
-
-
-
-
-import { useState } from "react";
-import FullCalendar from "@fullcalendar/react";
-import { formatDate } from '@fullcalendar/core';
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import listPlugin from "@fullcalendar/list";
-import { Box, List, ListItem, ListItemText, Typography, useTheme } from "@mui/material";
-import Pagetitles from "../../Pagetitles";
-import Header from "../global/header";
-import './index.css';
 
 
 
@@ -140,7 +127,6 @@ const Dashboard = () => {
   return (
     <Box className="calendar-container">
       <Pagetitles title="Calendar" subtitle="Shift Scheduler" />
-
       <Box className="calendar-layout">
         {/* CALENDAR SIDEBAR */}
         <Box className="calendar-sidebar">
@@ -195,8 +181,6 @@ const Dashboard = () => {
               onCreate={handleCreateEvent}
             />
           )}
-
-
         </Box>
       </Box>
     </Box>
