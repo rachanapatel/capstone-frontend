@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-export const URL = 'https://ets-trial-backend.onrender.com/signup';
 
 const CompanyRegistration = () => {
   const [companyName, setCompanyName] = useState('');
@@ -13,29 +12,11 @@ const CompanyRegistration = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // const handleRegister = (e) => {
-  //   e.preventDefault();
-
-  //   const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
-  //   const usernameExists = storedUsers.some((u) => u.username === username);
-
-  //   if (usernameExists) {
-  //     setError("Username already taken.");
-  //     return;
-  //   }
-
-  //   const newUser = { username, password, role };
-  //   const updatedUsers = [...storedUsers, newUser];
-
-  //   localStorage.setItem("users", JSON.stringify(updatedUsers));
-  //   navigate("/login");
-  // };
-
   const handleRegister = async (event) => {
     event.preventDefault(); // Prevent default form submission
 
     const storedCompanies = JSON.parse(localStorage.getItem("companies")) || [];
-    const usernameExists = storedCompanies.some((u) => u.username === username);
+    const usernameExists = storedCompanies.some((u) => u.managerUsername === managerUsername);
 
     if (usernameExists) {
       setError("Username already taken.");
@@ -49,16 +30,29 @@ const CompanyRegistration = () => {
 
     try {
       const response = await axios.post('http://localhost:8000/signup/', {
-        companyName,
-        managerName,
-        managerUsername, 
-        managerPassword
+        name: companyName,
+        manager_name: managerName,
+        manager_username: managerUsername,
+        manager_password: managerPassword
       });
+      
       console.log('Successful signup:', response.data);
       // Optionally, clear the form or redirect
       setCompanyName(''); setManagerName(''); setManagerUsername(''); setManagerPassword('');
-    } catch (error) {
-      console.error('Signup error', error);
+    } 
+    // catch (error) {
+    //   console.error('Signup error', error);
+    // }
+    catch (error) {
+      if (error.response && error.response.data) {
+        console.error('Signup error', error.response.data);
+        setError(
+          error.response.data.detail ||
+          JSON.stringify(error.response.data)
+        );
+      } else {
+        setError('Server error. Please try again.');
+      }
     }
   };  
 
@@ -93,13 +87,8 @@ const CompanyRegistration = () => {
           placeholder="Password"
           value={managerPassword}
           onChange={(e) => setManagerPassword(e.target.value)}
-          required
+          // required
         />
-        {/* <select value={role} onChange={(e) => setRole(e.target.value)}>
-          <option value="manager">Manager</option>
-          <option value="employee">Employee</option>
-        </select> */}
-
         <button type="submit">Create Account</button>
       </form>
     </div>

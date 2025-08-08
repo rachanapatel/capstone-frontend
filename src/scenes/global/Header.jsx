@@ -1,43 +1,24 @@
-// import { Box, IconButton, useTheme } from "@mui/material";
-// import { useContext } from "react";
-// import { theme } from "../../theme";
-// import InputBase from "@mui/material/InputBase";
-// import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
-// import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-// import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-// import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-// import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-// import SearchIcon from "@mui/icons-material/Search";
-
-// const Header = () => {
-//     return <div>Header</div>
-// };
-
-// // export default Header;
-
-
-
 import { useTheme } from "@mui/material";
 // import { useContext } from "react";
 import "./Header.css";
 import { Box, IconButton, InputBase,} from "@mui/material";
-// import {
-//   LightModeOutlined as LightModeOutlinedIcon,
-//   DarkModeOutlined as DarkModeOutlinedIcon,
-//   NotificationsOutlined as NotificationsOutlinedIcon,
-//   SettingsOutlined as SettingsOutlinedIcon,
-//   PersonOutlined as PersonOutlinedIcon,
-//   Search as SearchIcon,
-// } from "@mui/icons-material";
-
-
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import SearchIcon from '@mui/icons-material/Search';
+import LogoutIcon from "@mui/icons-material/Logout";
+// import { useTheme } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 
 
-const Header = () => {
+const Header = ({ setUser }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/"); // or navigate("/login") if that's your route
+  };  
   return (
     <Box className="header">
       {/* SEARCH BAR */}
@@ -52,6 +33,9 @@ const Header = () => {
       <Box className="icon-group">
         <IconButton> <CircleNotificationsIcon /> </IconButton>
         <IconButton> <ManageAccountsIcon /> </IconButton>
+        <IconButton onClick={handleLogout} title="Log out">
+          <LogoutIcon />
+        </IconButton>
       </Box>
     </Box>
   );

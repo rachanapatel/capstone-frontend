@@ -8,42 +8,12 @@ import Team from './scenes/team';
 import Homepage from './scenes/landing/Homepage';
 import Login from './scenes/landing/Login';
 import CompanyRegistration from './scenes/landing/CompanyRegistration';
+import Form from './scenes/form';
 // App.jsx
 import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
 export const URL = 'https://ets-trial-backend.onrender.com';
-
-
-// function App() {
-//   const [isSidebar, setIsSidebar] = useState(true);
-//   return (
-//   <div className="app">
-//     <div className="Landing">
-//       <Routes>
-//         <Route path="/check" element={<Homepage />} />
-//         {/* <Route path="/register" element={<CompanyRegistration />} /> 
-//         <Route path="/login" element={<Login />} />          */}
-//       </Routes>
-//     </div>
-//     <Header />
-//     <div className="app-layout">
-//       {isSidebar && <Sidebar isSidebar={isSidebar} />}
-//       <main className="main-content">
-//         <Routes>         
-//           <Route path="/dash" element={<Dashboard />} />
-//           <Route path="/team" element={<Team />} />
-//           <Route path="/calendar" element={<Dashboard />} />
-//         </Routes>
-//       </main>
-//     </div>
-//   </div>
-// )}
-
-// export default App
-
-
-
 
 
 function App() {
@@ -85,8 +55,11 @@ function App() {
               <Route path="/team" element={
                 <RequireAuth><Team user={user} /></RequireAuth>
               } />
+              <Route path="/form" element={
+                <RequireAuth><Form user={user} /></RequireAuth> 
+              } />              
               <Route path="/calendar" element={
-                <RequireAuth><Dashboard user={user} /></RequireAuth> // placeholder
+                <RequireAuth><Dashboard user={user} /></RequireAuth> 
               } />
               <Route path="*" element={<Navigate to="/dash" />} />
             </Routes>

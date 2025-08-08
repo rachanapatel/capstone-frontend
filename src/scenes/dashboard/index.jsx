@@ -20,6 +20,7 @@ import {
 import Pagetitles from "../../Pagetitles";
 import Header from "../global/header";
 import './index.css';
+import axios from "axios"; 
 
 // ✅ Yup validation schema
 const validationSchema = Yup.object({
@@ -48,8 +49,8 @@ function ShiftForm({ onClose, onCreate }) {
           }}
           validationSchema={validationSchema}
           onSubmit={(values) => {
-            onCreate(values); // Pass data back
-            onClose();        // Close modal
+            onCreate(values); 
+            onClose();        
           }}
         >
           <Form>
@@ -97,22 +98,70 @@ const Dashboard = () => {
     setShowForm(true);             // Show the form
   };
 
-  const handleCreateEvent = (formData) => {
-    const calendarApi = selectedDateInfo.view.calendar;
+  // const handleCreateEvent = (formData) => {
+  //   const calendarApi = selectedDateInfo.view.calendar;
   
-    calendarApi.unselect(); // clear selection
+  //   calendarApi.unselect(); // clear selection
   
-    calendarApi.addEvent({
-      id: `${selectedDateInfo.dateStr}-${formData.title}`,
-      title: formData.title,
-      description: formData.description,
-      category: formData.category,
-      start: selectedDateInfo.startStr,
-      end: selectedDateInfo.endStr,
-      allDay: selectedDateInfo.allDay,
-    });
+  //   calendarApi.addEvent({
+  //     id: `${selectedDateInfo.dateStr}-${formData.title}`,
+  //     title: formData.title,
+  //     description: formData.description,
+  //     category: formData.category,
+  //     start: selectedDateInfo.startStr,
+  //     end: selectedDateInfo.endStr,
+  //     allDay: selectedDateInfo.allDay,
+  //   });
+  // };
+
+
+const handleCreateEvent = async (formData) => {
+  const calendarApi = selectedDateInfo.view.calendar;
+  calendarApi.unselect(); // clear selection
+
+  const newEvent = {
+    id: `${selectedDateInfo.dateStr}-${formData.title}`,
+    title: formData.title,
+    description: formData.description,
+    category: formData.category,
+    start: selectedDateInfo.startStr,
+    end: selectedDateInfo.endStr,
+    allDay: selectedDateInfo.allDay,
   };
-  
+
+  // Add event to calendar immediately (local UI feedback)
+  calendarApi.addEvent(newEvent);
+
+  // Create backend shift object
+  try {
+    await axios.post("http://localhost:8000/dash/", {
+      starttime: selectedDateInfo.startStr,
+      duration: calculateDuration(selectedDateInfo.startStr, selectedDateInfo.endStr),
+      status: "prop", // default for now
+      recurring: false, // or formData.recurring if you have that
+    });
+    console.log("Shift saved successfully.");
+  } catch (error) {
+    console.error("Error saving shift:", error);
+    alert("Failed to save shift to backend.");
+  }
+};
+
+function calculateDuration(start, end) {
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+  const diffMs = endDate - startDate;
+
+  const diffSeconds = Math.floor(diffMs / 1000);
+  const hours = Math.floor(diffSeconds / 3600);
+  const minutes = Math.floor((diffSeconds % 3600) / 60);
+  const seconds = diffSeconds % 60;
+
+  return `PT${hours}H${minutes}M${seconds}S`; // ISO 8601 duration format
+}
+
+
+
 
   const handleEventClick = (selected) => {
     if (

@@ -1,6 +1,7 @@
 // Login.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Login = ({ setUser }) => {
   const [username, setUsername] = useState('');
@@ -8,23 +9,99 @@ const Login = ({ setUser }) => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+  // const handleLogin = (e) => {
+  //   e.preventDefault();
 
-    // Fake user DB — replace with your real check
-    const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
-    const foundUser = storedUsers.find(
-      (u) => u.username === username && u.password === password
-    );
+  //   // Fake user DB — replace with your real check
+  //   const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
+  //   const foundUser = storedUsers.find(
+  //     (u) => u.username === username && u.password === password
+  //   );
 
-    if (foundUser) {
-      setUser(foundUser);
-      localStorage.setItem("user", JSON.stringify(foundUser));
+  //   if (foundUser) {
+  //     setUser(foundUser);
+  //     localStorage.setItem("user", JSON.stringify(foundUser));
+  //     navigate("/dash");
+  //   } else {
+  //     setError("Invalid username or password");
+  //   }
+  // };
+
+  // const handleLogin = async (event) => {
+  //   event.preventDefault();
+  //   console.log("handleLogin called", { username, password });
+  
+  //   try {
+  //     const response = await axios.post('http://localhost:8000/login/', {
+  //       username,
+  //       password
+  //     });
+  
+  //     const user = response.data;
+  //     setUser(user);
+  //     localStorage.setItem("user", JSON.stringify(user));
+  //     navigate("/dash");
+  //   } 
+  //   // catch (err) {
+  //   //   if (err.response && err.response.status === 401) {
+  //   //     setError("Invalid username or password");
+  //   //   } else {
+  //   //     setError("Server error. Please try again.");
+  //   //   }
+  //   // }
+
+  // catch (err) {
+  //   if (err.response) {
+  //     if (err.response.status === 401) {
+  //       setError(err.response.data.detail || "Invalid username or password");
+  //     } else {
+  //       setError(`Server error: ${err.response.status}`);
+  //     }
+  //   } else {
+  //     setError("Network error. Please check your connection.");
+  //   }}};
+
+
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    console.log("handleLogin called", { username, password });
+  
+    try {
+      console.log("Sending axios request...");
+      const response = await axios.post('http://localhost:8000/login/', {
+        username,
+        password
+      });
+      console.log("Axios response:", response.data);
+  
+      const user = response.data;
+      setUser(user);
+      localStorage.setItem("user", JSON.stringify(user));
       navigate("/dash");
-    } else {
-      setError("Invalid username or password");
+  
+    } catch (err) {
+      console.error("Login error:", err);
+  
+      if (err.response) {
+        console.error("Response status:", err.response.status);
+        console.error("Response data:", err.response.data);
+  
+        if (err.response.status === 401) {
+          setError(err.response.data.detail || "Invalid username or password");
+        } else {
+          setError(`Server error: ${err.response.status}`);
+        }
+      } else if (err.request) {
+        console.error("No response received:", err.request);
+        setError("No response from server. Is it running?");
+      } else {
+        console.error("Axios config error:", err.message);
+        setError("Request setup error.");
+      }
     }
   };
+  
+  
 
   return (
     <div className="login-page">
