@@ -5,9 +5,12 @@ import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettin
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "../global/Header";
+import { Link } from 'react-router-dom';
+import Pagetitles from "../../Pagetitles";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 
-const emptyRows = [];
 const rows = [
     {
       id: 1,
@@ -34,15 +37,33 @@ const rows = [
 
 const Team = () => {
   const theme = useTheme();
-//   const colors = tokens(theme.palette.mode);
+  const [teamData, setTeamData] = useState([]);
+
+
+  useEffect(() => {
+    async function fetchTeamData() {
+      try {
+        const response = await axios.get("http://localhost:8000/team/");
+        setTeamData(response.data); // store the data to be used in DataGrid
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }    
+    fetchTeamData();
+  }, []);
+
 
   const columns = [
-    { field: "id", headerName: "ID" },
     {
       field: "name",
-      headerName: "Name",
+      headerName: "Team Member",
       flex: 1,
       cellClassName: "name-column--cell",
+    },
+    {
+      field: "email",
+      headerName: "Contact Information",
+      flex: 1,
     },
     {
       field: "position",
@@ -50,12 +71,7 @@ const Team = () => {
       type: "text",
       headerAlign: "left",
       align: "left",
-    },
-    {
-      field: "email",
-      headerName: "Email",
-      flex: 1,
-    },
+    },    
     // {
     //   field: "accessLevel",
     //   headerName: "Access Level",
@@ -68,18 +84,10 @@ const Team = () => {
     //         p="5px"
     //         display="flex"
     //         justifyContent="center"
-    //         backgroundColor={
-    //           access === "admin"
-    //             ? colors.greenAccent[600]
-    //             : access === "manager"
-    //             ? colors.greenAccent[700]
-    //             : colors.greenAccent[700]
-    //         }
     //         borderRadius="4px"
     //       >
     //         {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
     //         {access === "manager" && <SecurityOutlinedIcon />}
-    //         {access === "user" && <LockOpenOutlinedIcon />}
     //         <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
     //           {access}
     //         </Typography>
@@ -91,7 +99,7 @@ const Team = () => {
 
   return (
     <Box m="20px">
-      <Header title="TEAM" subtitle="Roster" />
+      <Pagetitles title="TEAM" subtitle="Roster" />
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -121,7 +129,11 @@ const Team = () => {
           },
         }}
       >
-        <DataGrid checkboxSelection rows={rows} columns={columns} />
+        <div>
+            <Link to="/form">Add Employee</Link> | <Link to="/position">Add Position</Link>
+            </div>
+
+        <DataGrid rows={teamData} columns={columns} />
       </Box>
     </Box>
   );

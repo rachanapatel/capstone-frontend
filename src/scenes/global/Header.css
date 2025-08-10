@@ -2,11 +2,13 @@
     display: flex;
     justify-content: space-between;
     padding: 16px;
+    align-items: center;
+    background-color: #646cff8e;
   }
   
-  .search-bar {
+  /* .search-bar {
     display: flex;
-    background-color: var(--mui-primary-400); /* You may need to inject theme colors manually */
+    background-color: var(--mui-primary-400); 
     border-radius: 3px;
   }
   
@@ -17,9 +19,13 @@
   
   .search-button {
     padding: 8px;
-  }
+  } */
   
   .icon-group {
+    /* margin-left: 800px; */
+    margin-left: auto;
     display: flex;
+    /* justify-content: flex-end; */
+    margin-right: 20px;
   }
   

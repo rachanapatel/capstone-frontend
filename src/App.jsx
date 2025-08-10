@@ -9,11 +9,13 @@ import Homepage from './scenes/landing/Homepage';
 import Login from './scenes/landing/Login';
 import CompanyRegistration from './scenes/landing/CompanyRegistration';
 import Form from './scenes/form';
+import PositionForm from './scenes/PositionForm';
 // App.jsx
 import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
 export const URL = 'https://ets-trial-backend.onrender.com';
+
 
 
 function App() {
@@ -57,7 +59,10 @@ function App() {
               } />
               <Route path="/form" element={
                 <RequireAuth><Form user={user} /></RequireAuth> 
-              } />              
+              } /> 
+              <Route path="/position" element={
+                <RequireAuth><PositionForm user={user} /></RequireAuth> 
+              } />                            
               <Route path="/calendar" element={
                 <RequireAuth><Dashboard user={user} /></RequireAuth> 
               } />

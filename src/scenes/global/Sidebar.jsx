@@ -93,6 +93,7 @@ const Sidebar = () => {
             <Item title="Contacts Information" to="/team/position" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />
             {/* <Item title="Invoices Balances" to="/invoices" icon={<ReceiptOutlinedIcon />} selected={selected} setSelected={setSelected} /> */}
             <Item title="New Member" to="/form" icon={<PersonOutlinedIcon />} selected={selected} setSelected={setSelected} />
+            <Item title="New Position" to="/position" icon={<PersonOutlinedIcon />} selected={selected} setSelected={setSelected} />
 
             <Typography variant="h6" className="section-title">
               PLAN

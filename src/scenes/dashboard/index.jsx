@@ -56,13 +56,22 @@ function ShiftForm({ onClose, onCreate }) {
           <Form>
             <div>
               <label htmlFor="position">Position:</label>
-              <Field type="text" name="position" />
+              {/* <Field type="text" name="position" /> */}
+              <Field as="select" name="position">
+
+              </Field>
               <ErrorMessage name="position" component="div" style={{ color: 'red' }} />
             </div>
             <div>
               <label htmlFor="shift-status">Shift Status:</label>
-              <Field type="text" name="email" />
-              <ErrorMessage name="shift-status" component="div" style={{ color: 'red' }} />
+              <Field as="select" name="shiftStatus">
+                <option value="">Select shift status</option>
+                <option value="active">Proposed</option>
+                <option value="inactive">Accepted</option>
+                <option value="pending">Preferred</option>
+                <option value="pending">Rejected</option>
+              </Field>
+              <ErrorMessage name="shiftStatus" component="div" style={{ color: 'red' }} />
             </div>
             <div>
               <label htmlFor="employee">Employee:</label>
@@ -97,23 +106,6 @@ const Dashboard = () => {
     setSelectedDateInfo(selected); // Store the clicked date info
     setShowForm(true);             // Show the form
   };
-
-  // const handleCreateEvent = (formData) => {
-  //   const calendarApi = selectedDateInfo.view.calendar;
-  
-  //   calendarApi.unselect(); // clear selection
-  
-  //   calendarApi.addEvent({
-  //     id: `${selectedDateInfo.dateStr}-${formData.title}`,
-  //     title: formData.title,
-  //     description: formData.description,
-  //     category: formData.category,
-  //     start: selectedDateInfo.startStr,
-  //     end: selectedDateInfo.endStr,
-  //     allDay: selectedDateInfo.allDay,
-  //   });
-  // };
-
 
 const handleCreateEvent = async (formData) => {
   const calendarApi = selectedDateInfo.view.calendar;
@@ -157,7 +149,7 @@ function calculateDuration(start, end) {
   const minutes = Math.floor((diffSeconds % 3600) / 60);
   const seconds = diffSeconds % 60;
 
-  return `PT${hours}H${minutes}M${seconds}S`; // ISO 8601 duration format
+  return `PT${hours}H${minutes}M${seconds}S`; 
 }
 
 
@@ -175,7 +167,7 @@ function calculateDuration(start, end) {
 
   return (
     <Box className="calendar-container">
-      <Pagetitles title="Calendar" subtitle="Shift Scheduler" />
+      <Pagetitles title="View Schedule" subtitle="Shift Scheduler" />
       <Box className="calendar-layout">
         {/* CALENDAR SIDEBAR */}
         <Box className="calendar-sidebar">

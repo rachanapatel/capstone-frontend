@@ -1,10 +1,3 @@
-// const Homepage = () => {
-//     return <div>Welcome</div>
-
-// };
-
-// export default Homepage;
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 
