@@ -1,7 +1,6 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-
 import { useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import { formatDate } from '@fullcalendar/core';
@@ -18,9 +17,9 @@ import {
   Button,
 } from "@mui/material";
 import Pagetitles from "../../Pagetitles";
-import Header from "../global/header";
 import './index.css';
 import axios from "axios"; 
+import { useEffect} from 'react';
 
 // ✅ Yup validation schema
 const validationSchema = Yup.object({
@@ -31,11 +30,36 @@ const validationSchema = Yup.object({
   shift_status: Yup.string()
     .required('Status is required'),
   recurring: Yup.boolean()
-    // .oneOf([true], 'You must accept the terms'),
 });
 
 
-function ShiftForm({ onClose, onCreate }) {
+function ShiftForm({ onClose, onCreate, user }) {
+
+  const [positions, setPositions] = useState([]);
+  const [employees, setEmployees] = useState([]);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const headers = { 'X-Company-ID': user.company };
+  
+        const [positionsRes, employeesRes] = await Promise.all([
+          axios.get('http://localhost:8000/team/positions/', { headers }),
+          axios.get('http://localhost:8000/team/employees/', { headers }),
+        ]);
+  
+        setPositions(positionsRes.data);
+        setEmployees(employeesRes.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+  
+    fetchData();
+  }, [user.company]);
+  
+
+
   return (
     <Dialog open={true} onClose={onClose}>
       <DialogTitle>Create Shift</DialogTitle>
@@ -54,14 +78,28 @@ function ShiftForm({ onClose, onCreate }) {
           }}
         >
           <Form>
+            {/* <div>
+              <label htmlFor="position">Position:</label>
+              <Field as="select" name="position">
+              </Field>
+              <ErrorMessage name="position" component="div" style={{ color: 'red' }} />
+            </div> */}
+
             <div>
               <label htmlFor="position">Position:</label>
-              {/* <Field type="text" name="position" /> */}
               <Field as="select" name="position">
-
+                <option value="">Select position</option>
+                {positions.map((pos) => (
+                  <option key={pos.id} value={pos.id}>
+                    {pos.title}
+                  </option>
+                ))}
               </Field>
               <ErrorMessage name="position" component="div" style={{ color: 'red' }} />
             </div>
+
+
+            
             <div>
               <label htmlFor="shift-status">Shift Status:</label>
               <Field as="select" name="shiftStatus">
@@ -73,9 +111,21 @@ function ShiftForm({ onClose, onCreate }) {
               </Field>
               <ErrorMessage name="shiftStatus" component="div" style={{ color: 'red' }} />
             </div>
-            <div>
+            {/* <div>
               <label htmlFor="employee">Employee:</label>
               <Field type="text" name="employee" />
+            </div> */}
+            <div>
+              <label htmlFor="employee">Employee:</label>
+              <Field as="select" name="employee">
+                <option value="">Select employee</option>
+                {employees.map((emp) => (
+                  <option key={emp.id} value={emp.id}>
+                    {emp.name}
+                  </option>
+                ))}
+              </Field>
+              {/* <ErrorMessage name="employee" component="div" style={{ color: 'red' }} /> */}
             </div>
             <div>
               <label>
@@ -210,14 +260,11 @@ function calculateDuration(start, end) {
             select={handleDateClick}
             eventClick={handleEventClick}
             eventsSet={(events) => setCurrentEvents(events)}
-            // initialEvents={[
-            //   { id: "12315", title: "All-day event", date: "2022-09-14" },
-            //   { id: "5123", title: "Timed event", date: "2022-09-28" },
-            // ]}
           />
           {showForm && selectedDateInfo && (
             <ShiftForm
-              dateInfo={selectedDateInfo}
+              // dateInfo={selectedDateInfo}
+              user={user}
               onClose={() => setShowForm(false)}
               onCreate={handleCreateEvent}
             />

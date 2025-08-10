@@ -10,29 +10,6 @@ import Pagetitles from "../../Pagetitles";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-
-const rows = [
-    {
-      id: 1,
-      name: "John Doe",
-      position: "Manager",
-      email: "johndoe@example.com",
-      accessLevel: "manager"},
-    {id: 2,
-        name: "Jane Smith",
-      position: "Cashier",
-      email: "janesmith@example.com",
-      accessLevel: "user",
-    },
-    {
-      id: 3,
-      name: "Sam Smith",
-      position: "Cashier",
-      email: "sam@example.com",
-      accessLevel: "user",
-    },
-  ];
-
   
 
 const Team = () => {
@@ -140,3 +117,26 @@ const Team = () => {
 };
 
 export default Team;
+
+
+// const rows = [
+//     {
+//       id: 1,
+//       name: "John Doe",
+//       position: "Manager",
+//       email: "johndoe@example.com",
+//       accessLevel: "manager"},
+//     {id: 2,
+//         name: "Jane Smith",
+//       position: "Cashier",
+//       email: "janesmith@example.com",
+//       accessLevel: "user",
+//     },
+//     {
+//       id: 3,
+//       name: "Sam Smith",
+//       position: "Cashier",
+//       email: "sam@example.com",
+//       accessLevel: "user",
+//     },
+//   ];
