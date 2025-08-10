@@ -1,7 +1,6 @@
-// import React from 'react';
+// import React, { useState, useEffect } from 'react';
 // import { Formik, Form, Field, ErrorMessage } from 'formik';
 // import * as Yup from 'yup';
-// import { useState, useEffect } from "react";
 // import {
 //   Dialog,
 //   DialogTitle,
@@ -9,11 +8,9 @@
 //   DialogActions,
 //   Button,
 // } from "@mui/material";
+// import axios from "axios";
 // import './index.css';
-// import axios from "axios"; 
 
-
-// // ✅ Yup validation schema
 // const validationSchema = Yup.object({
 //   position: Yup.string().required('Position is required'),
 //   employee: Yup.string(),
@@ -21,17 +18,10 @@
 //   recurring: Yup.boolean()
 // });
 
-
 // function ShiftForm({ onClose, onCreate, user }) {
-//     useEffect(() => {
-//         console.log("ShiftForm user:", user);
-//       }, [user]);    
-
 //   const [positions, setPositions] = useState([]);
 //   const [employees, setEmployees] = useState([]);
-//   const [selectedPosition, setSelectedPosition] = useState('');
 
-  
 //   useEffect(() => {
 //     const fetchData = async () => {
 //       try {
@@ -40,18 +30,15 @@
 //           axios.get('http://localhost:8000/team/positions/', { headers }),
 //           axios.get('http://localhost:8000/team/employees/', { headers }),
 //         ]);
-  
+
 //         setPositions(positionsRes.data);
 //         setEmployees(employeesRes.data);
-//         console.log("Fetched positions:", positionsRes.data);
-//         console.log("Fetched employees:", employeesRes.data);
 //       } catch (error) {
 //         console.error('Error fetching data:', error);
 //       }
 //     };
 //     fetchData();
 //   }, [user.company]);
-  
 
 //   return (
 //     <Dialog open={true} onClose={onClose}>
@@ -66,66 +53,102 @@
 //           }}
 //           validationSchema={validationSchema}
 //           onSubmit={(values) => {
-//             console.log("Submitting shift form values:", values);
-//             onCreate(values); 
-//             onClose();        
+//             onCreate(values);
+//             onClose();
 //           }}
 //         >
-//           <Form>
-//             <div>
-//               <label htmlFor="position">Position:</label>
-//               <Field as="select" name="position">
-//                 <option value="">Select position</option>
-//                 {positions.map((pos) => (
-//                   <option key={pos.id} value={pos.id}>
-//                     {pos.title}
-//                   </option>
-//                 ))}
-//               </Field>
-//               <ErrorMessage name="position" component="div" style={{ color: 'red' }} />
-//             </div>
-//             <div>
-//               <label htmlFor="shift-status">Shift Status:</label>
-//               <Field as="select" name="shiftStatus">
-//                 <option value="">Select shift status</option>
-//                 <option value="prop">Proposed</option>
-//                 <option value="acc">Accepted</option>
-//                 <option value="pref">Preferred</option>
-//                 <option value="rej">Rejected</option>
-//               </Field>
-//               <ErrorMessage name="shiftStatus" component="div" style={{ color: 'red' }} />
-//             </div>
-//             <div>
-//               <label htmlFor="employee">Employee:</label>
-//               <Field as="select" name="employee">
-//                 <option value="">Select employee</option>
-//                 {employees.map((emp) => (
-//                   <option key={emp.id} value={emp.id}>
-//                     {emp.name}
-//                   </option>
-//                 ))}
-//               </Field>
-//             </div>
-//             <div>
-//               <label>
-//                 <Field type="checkbox" name="recurring" />
-//                 Recurring shift
-//               </label>
-//               <ErrorMessage name="recurring" component="div" style={{ color: 'red' }} />
-//             </div>            
-//             <DialogActions>
-//               <Button onClick={onClose}>Cancel</Button>
-//               <Button type="submit" variant="contained">Save</Button>
-//             </DialogActions>
-//           </Form>
+//           {({ values, setFieldValue }) => (
+//             <Form>
+//               <div>
+//                 <label htmlFor="position">Position:</label>
+//                 <Field
+//                   as="select"
+//                   name="position"
+//                   value={values.position}
+//                   onChange={(e) => {
+//                     const val = e.target.value;
+//                     setFieldValue('position', val);
+//                     // Clear employee selection on position change
+//                     setFieldValue('employee', '');
+//                   }}
+//                 >
+//                   <option value="">Select position</option>
+//                   {positions.map((pos) => {
+//                     const matchingEmployee = employees.find(emp => emp.id.toString() === values.employee);
+//                     const employeePositionId = matchingEmployee ? matchingEmployee.position.toString() : null;
+
+//                     const isSelectable = values.employee === '' || pos.id.toString() === employeePositionId;
+
+//                     return (
+//                       <option
+//                         key={pos.id}
+//                         value={pos.id}
+//                         disabled={!isSelectable}
+//                       >
+//                         {pos.title}
+//                       </option>
+//                     );
+//                   })}
+//                 </Field>
+//                 <ErrorMessage name="position" component="div" style={{ color: 'red' }} />
+//               </div>
+
+//               <div>
+//                 <label htmlFor="shiftStatus">Shift Status:</label>
+//                 <Field as="select" name="shiftStatus" value={values.shiftStatus}>
+//                   <option value="">Select shift status</option>
+//                   <option value="prop">Proposed</option>
+//                   <option value="acc">Accepted</option>
+//                   <option value="pref">Preferred</option>
+//                   <option value="rej">Rejected</option>
+//                 </Field>
+//                 <ErrorMessage name="shiftStatus" component="div" style={{ color: 'red' }} />
+//               </div>
+
+//               <div>
+//                 <label htmlFor="employee">Employee:</label>
+//                 <Field
+//                   as="select"
+//                   name="employee"
+//                   value={values.employee}
+//                   onChange={(e) => setFieldValue('employee', e.target.value)}
+//                 >
+//                   <option value="">Select employee</option>
+//                   {employees.map((emp) => {
+//                     const hasPosition = values.position === '' || emp.position.toString() === values.position;
+//                     return (
+//                       <option
+//                         key={emp.id}
+//                         value={emp.id}
+//                         disabled={!hasPosition}
+//                       >
+//                         {emp.name}
+//                       </option>
+//                     );
+//                   })}
+//                 </Field>
+//               </div>
+
+//               <div>
+//                 <label>
+//                   <Field type="checkbox" name="recurring" />
+//                   Recurring shift
+//                 </label>
+//               </div>
+
+//               <DialogActions>
+//                 <Button onClick={onClose}>Cancel</Button>
+//                 <Button type="submit" variant="contained">Save</Button>
+//               </DialogActions>
+//             </Form>
+//           )}
 //         </Formik>
 //       </DialogContent>
 //     </Dialog>
 //   );
 // }
 
-
-// export default ShiftForm
+// export default ShiftForm;
 
 
 
@@ -149,12 +172,9 @@ const validationSchema = Yup.object({
   recurring: Yup.boolean()
 });
 
-function ShiftForm({ onClose, onCreate, user }) {
+function ShiftForm({ onClose, onCreate, onUpdate, onDelete, user, shift = null }) {
   const [positions, setPositions] = useState([]);
   const [employees, setEmployees] = useState([]);
-  const [selectedPosition, setSelectedPosition] = useState('');
-  const [selectedEmployee, setSelectedEmployee] = useState('');
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -164,7 +184,6 @@ function ShiftForm({ onClose, onCreate, user }) {
           axios.get('http://localhost:8000/team/positions/', { headers }),
           axios.get('http://localhost:8000/team/employees/', { headers }),
         ]);
-
         setPositions(positionsRes.data);
         setEmployees(employeesRes.data);
       } catch (error) {
@@ -174,20 +193,37 @@ function ShiftForm({ onClose, onCreate, user }) {
     fetchData();
   }, [user.company]);
 
+  const handleDelete = async () => {
+    if (!shift?.id) return;
+    try {
+      await axios.delete(`http://localhost:8000/dash/${shift.id}/`);
+      onDelete?.(shift.id);
+      onClose();
+    } catch (err) {
+      console.error('Error deleting shift:', err);
+      alert('Failed to delete shift');
+    }
+  };
+
   return (
     <Dialog open={true} onClose={onClose}>
-      <DialogTitle>Create Shift</DialogTitle>
+      <DialogTitle>{shift ? 'Update Shift' : 'Create Shift'}</DialogTitle>
       <DialogContent dividers>
         <Formik
+          enableReinitialize
           initialValues={{
-            position: '',
-            employee: '',
-            shiftStatus: '',
-            recurring: false,
+            position: shift?.position?.toString() || '',
+            employee: shift?.employee?.toString() || '',
+            shiftStatus: shift?.status || '',
+            recurring: shift?.recurring || false,
           }}
           validationSchema={validationSchema}
           onSubmit={(values) => {
-            onCreate(values);
+            if (shift) {
+              onUpdate?.({ ...values, id: shift.id });
+            } else {
+              onCreate(values);
+            }
             onClose();
           }}
         >
@@ -195,54 +231,34 @@ function ShiftForm({ onClose, onCreate, user }) {
             <Form>
               <div>
                 <label htmlFor="position">Position:</label>
-                {/* <Field
+                <Field
                   as="select"
                   name="position"
                   onChange={(e) => {
-                    const val = e.target.value;
-                    setFieldValue('position', val);
-                    setSelectedPosition(val);
-                    setFieldValue('employee', ''); // reset employee on position change
+                    setFieldValue('position', e.target.value);
+                    setFieldValue('employee', ''); // reset employee if position changes
                   }}
-                  value={values.position}
                 >
                   <option value="">Select position</option>
-                  {positions.map((pos) => (
-                    <option key={pos.id} value={pos.id}>
-                      {pos.title}
-                    </option>
-                  ))}
-                </Field> */}
-                {/* <ErrorMessage name="position" component="div" style={{ color: 'red' }} /> */}
-                <Field as="select" name="position" value={values.position}
-                onChange={(e) => {
-                    const val = e.target.value;
-                    setFieldValue('position', val);
-                    setSelectedPosition(val);
-                }}>
-                <option value="">Select position</option>
-                {positions.map((pos) => {
-                    const matchingEmployee = employees.find(emp => emp.id === parseInt(selectedEmployee));
-                    const employeePositionId = matchingEmployee ? matchingEmployee.position : null;
-
-                    const isSelectable =
-                    selectedEmployee === '' || pos.id === employeePositionId;
-
-                    return (
-                    <option
-                        key={pos.id}
-                        value={pos.id}
-                        disabled={!isSelectable}
-                    >
-                        {pos.title}
-                    </option>
+                  {positions.map((pos) => {
+                    const matchingEmployee = employees.find(
+                      emp => emp.id === parseInt(values.employee)
                     );
-                })}
+                    const employeePositionId = matchingEmployee ? matchingEmployee.position : null;
+                    const isSelectable = !values.employee || pos.id === employeePositionId;
+                    return (
+                      <option key={pos.id} value={pos.id} disabled={!isSelectable}>
+                        {pos.title}
+                      </option>
+                    );
+                  })}
                 </Field>
+                <ErrorMessage name="position" component="div" style={{ color: 'red' }} />
               </div>
+
               <div>
                 <label htmlFor="shiftStatus">Shift Status:</label>
-                <Field as="select" name="shiftStatus" value={values.shiftStatus}>
+                <Field as="select" name="shiftStatus">
                   <option value="">Select shift status</option>
                   <option value="prop">Proposed</option>
                   <option value="acc">Accepted</option>
@@ -254,48 +270,23 @@ function ShiftForm({ onClose, onCreate, user }) {
 
               <div>
                 <label htmlFor="employee">Employee:</label>
-                {/* <Field as="select" name="employee" value={values.employee}>
+                <Field
+                  as="select"
+                  name="employee"
+                  onChange={(e) => setFieldValue('employee', e.target.value)}
+                >
                   <option value="">Select employee</option>
                   {employees.map((emp) => {
-                    // Assumes employee.positions is an array of position IDs (numbers)
-                    // const hasPosition =
-                    //   selectedPosition === '' ||
-                    //   (emp.positions && emp.positions.includes(parseInt(selectedPosition)));
-                    const hasPosition =
-                      selectedPosition === '' ||
-                      emp.position === parseInt(selectedPosition);                      
+                    const hasPosition = !values.position || emp.position === parseInt(values.position);
                     return (
-                      <option
-                        key={emp.id}
-                        value={emp.id}
-                        disabled={!hasPosition}
-                      >
+                      <option key={emp.id} value={emp.id} disabled={!hasPosition}>
                         {emp.name}
                       </option>
                     );
                   })}
-                </Field> */}
-                <Field as="select" name="employee" value={values.employee}
-                onChange={(e) => {
-                    const val = e.target.value;
-                    setFieldValue('employee', val);
-                    setSelectedEmployee(val);
-                }}>
-                <option value="">Select employee</option>
-                {employees.map((emp) => {
-                    const hasPosition =
-                    selectedPosition === '' || emp.position === parseInt(selectedPosition);
-                    return (
-                    <option
-                        key={emp.id}
-                        value={emp.id}
-                        disabled={!hasPosition}>
-                        {emp.name}
-                    </option>
-                    );
-                })}
                 </Field>
               </div>
+
               <div>
                 <label>
                   <Field type="checkbox" name="recurring" />
@@ -305,7 +296,14 @@ function ShiftForm({ onClose, onCreate, user }) {
 
               <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>
-                <Button type="submit" variant="contained">Save</Button>
+                {shift && (
+                  <Button onClick={handleDelete} color="error">
+                    Delete
+                  </Button>
+                )}
+                <Button type="submit" variant="contained">
+                  {shift ? 'Save Changes' : 'Save'}
+                </Button>
               </DialogActions>
             </Form>
           )}
