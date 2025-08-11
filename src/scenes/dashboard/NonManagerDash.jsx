@@ -12,6 +12,9 @@ import ShiftForm from './ShiftForm';
 import EventDetail from './EventDetail'
 import './index.css';
 
+// const kBaseURL='http://localhost:8000';
+const kBaseURL = 'https://ets-trial-backend.onrender.com';
+
 const NonManagerDash = ({ user }) => {
     const [currentEvents, setCurrentEvents] = useState([]);
     const [showForm, setShowForm] = useState(false);
@@ -30,9 +33,7 @@ const NonManagerDash = ({ user }) => {
       async function fetchEvents() {
         try {
           const headers = { 'X-Company-ID': user.company };
-          const response = await axios.get("http://localhost:8000/dash/", { headers });
-  
-
+          const response = await axios.get(`${kBaseURL}/dash/`, { headers });
           const events = response.data
             .filter(shift => shift.employee?.id === userId)  
             .map(shift => ({
@@ -74,7 +75,7 @@ const NonManagerDash = ({ user }) => {
     const shiftId = clickInfo.event.id;
     try {
       const headers = { 'X-Company-ID': user.company };
-      const response = await axios.get(`http://localhost:8000/dash/${shiftId}/`, { headers });
+      const response = await axios.get(`${kBaseURL}/dash/${shiftId}/`, { headers });
       setEventDetailData(response.data);
       setShowEventDetail(true);
       setShowForm(false);
@@ -92,8 +93,8 @@ const NonManagerDash = ({ user }) => {
 
   const handleUpdateShift = async (updatedData) => {
     try {
-      const headers = { 'X-Company-ID': user.company };
-      await axios.put(`http://localhost:8000/dash/${updatedData.id}/`, {
+      const headers = { 'X-Company-ID': user.company }; 
+      await axios.put(`${kBaseURL}/dash/${updatedData.id}/`, {
         // starttime: eventDetailData.starttime, 
         // duration: eventDetailData.duration,
         status: updatedData.shiftStatus,

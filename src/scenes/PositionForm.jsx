@@ -6,6 +6,9 @@ import Pagetitles from "../Pagetitles";
 import axios from "axios";
 import { useEffect } from 'react';
 
+// const kBaseURL='http://localhost:8000';
+const kBaseURL = 'https://ets-trial-backend.onrender.com';
+
 const PositionForm = ({ user }) => {
 
   useEffect(() => {
@@ -17,7 +20,7 @@ const PositionForm = ({ user }) => {
 
   const handleFormSubmit = async (values) => {
     try {
-      const response = await axios.post('http://localhost:8000/team/positions/', 
+      const response = await axios.post(`${kBaseURL}/team/positions/`, 
         {
           title: values.position, 
           company: user.company,

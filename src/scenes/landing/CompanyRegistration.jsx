@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+// const kBaseURL='http://localhost:8000';
+const kBaseURL = 'https://ets-trial-backend.onrender.com';
+
 const CompanyRegistration = () => {
   const [companyName, setCompanyName] = useState('');
   const [managerName, setManagerName] = useState('');
@@ -28,7 +31,7 @@ const CompanyRegistration = () => {
     navigate("/login");
 
     try {
-      const response = await axios.post('http://localhost:8000/signup/', {
+      const response = await axios.post(`${kBaseURL}/signup/`, {
         name: companyName,
         manager_name: managerName,
         manager_username: managerUsername,

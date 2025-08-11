@@ -8,6 +8,10 @@ import axios from "axios";
 import EmployeeDetail from "./EmployeeDetail";
 import PositionDetail from "./PositionDetail";
 
+// const kBaseURL='http://127.0.0.1:5000';
+// const kBaseURL='http://localhost:8000';
+const kBaseURL = 'https://ets-trial-backend.onrender.com';
+
 const Team = ({ user }) => {
   const theme = useTheme();
   const [teamData, setTeamData] = useState([]);
@@ -20,7 +24,8 @@ const Team = ({ user }) => {
     async function fetchTeamData() {
       try {
         const headers = { "X-Company-ID": user.company };
-        const response = await axios.get("http://localhost:8000/team/employees/", { headers });
+        // const response = await axios.get("http://localhost:8000/team/employees/", { headers });
+        const response = await axios.get(`${kBaseURL}/team/employees/`, { headers });
         setTeamData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);

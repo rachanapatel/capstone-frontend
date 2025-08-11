@@ -7,6 +7,8 @@ function EventDetailModal({ open, eventData, onClose, onUpdate, onDelete, user }
 
   if (!eventData) return null;
 
+  console.log(eventData);
+
   const handleEditClick = () => setIsEditing(true);
   const handleCancelEdit = () => setIsEditing(false);
 

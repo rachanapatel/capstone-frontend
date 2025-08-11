@@ -15,7 +15,10 @@ import CompanyRegistration from './scenes/landing/CompanyRegistration';
 import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
-export const URL = 'https://ets-trial-backend.onrender.com';
+// export const URL = 'https://ets-trial-backend.onrender.com';
+// const kBaseURL='http://127.0.0.1:5000';
+const kBaseURL = 'https://ets-trial-backend.onrender.com';
+
 
 const NoAccess = () => (
   <div style={{ color: 'red', padding: '20px', textAlign: 'center' }}>

@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, } from "@mui/material";
   
-  
+// const kBaseURL='http://localhost:8000';
+const kBaseURL = 'https://ets-trial-backend.onrender.com';
+
   const AddPositionDialog = ({ user, onClose, onPositionCreated }) => {
     const [title, setTitle] = useState("");
     const [submitting, setSubmitting] = useState(false);
@@ -12,7 +14,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, }
   
       setSubmitting(true);
       try {
-        const response = await axios.post('http://localhost:8000/team/positions/', {
+        const response = await axios.post(`${kBaseURL}/team/positions/`, {
           title,
           company: user.company,
         });

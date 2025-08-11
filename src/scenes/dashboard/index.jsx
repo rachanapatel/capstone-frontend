@@ -12,6 +12,9 @@ import ShiftForm from './ShiftForm';
 import EventDetail from './EventDetail'
 import './index.css';
 
+// const kBaseURL='http://localhost:8000';
+const kBaseURL = 'https://ets-trial-backend.onrender.com';
+
 const Dashboard = ({ user }) => {
   const [currentEvents, setCurrentEvents] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -25,25 +28,92 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
   console.log("User's Position:", savedUser.position);
 
 
+  // useEffect(() => {
+  //   async function fetchEvents() {
+  //     try {
+  //       const headers = { 'X-Company-ID': user.company };
+  //       const response = await axios.get("http://localhost:8000/dash/", { headers });
+  
+  //       const events = response.data.map(shift => ({
+  //         id: shift.id,
+  //         title: shift.position?.title || 'No Position',
+  //         start: shift.starttime,
+  //         end: new Date(new Date(shift.starttime).getTime() + parseDurationToMs(shift.duration)).toISOString(),
+  //         allDay: false, 
+  //         extendedProps: {
+  //           shiftStatus: shift.status,
+  //           recurring: shift.recurring,
+  //           position: shift.position?.id,
+  //           employee: shift.employee?.id,
+  //         }
+  //       }));
+        
+  //       setCurrentEvents(events);
+  //     } catch (error) {
+  //       console.error("Error fetching events:", error);
+  //     }
+  //   }
+  
+  //   fetchEvents();
+  // }, [user.company]);
+  // useEffect(() => {
+  //   async function fetchEvents() {
+  //     try {
+  //       const headers = { 'X-Company-ID': user.company };
+  //       const response = await axios.get("http://localhost:8000/dash/", { headers });
+  
+  //       const events = response.data.map(shift => ({
+  //         id: shift.id,
+  //         title: shift.position?.title || 'No Position',
+  //         start: shift.starttime,
+  //         end: new Date(new Date(shift.starttime).getTime() + parseDurationToMs(shift.duration)).toISOString(),
+  //         allDay: false, 
+  //         extendedProps: {
+  //           shiftStatus: shift.status,
+  //           recurring: shift.recurring,
+  //           position: shift.position,  // Include the full position object
+  //           employee: shift.employee?.id,
+  //         }
+  //       }));
+  //       setCurrentEvents(events);
+  //     } catch (error) {
+  //       console.error("Error fetching events:", error);
+  //     }
+  //   }
+  
+  //   fetchEvents();
+  // }, [user.company]);
+  
   useEffect(() => {
     async function fetchEvents() {
       try {
         const headers = { 'X-Company-ID': user.company };
-        const response = await axios.get("http://localhost:8000/dash/", { headers });
+        const response = await axios.get(`${kBaseURL}/dash/`, { headers });
   
-        const events = response.data.map(shift => ({
-          id: shift.id,
-          title: shift.position?.title || 'No Position',
-          start: shift.starttime,
-          end: new Date(new Date(shift.starttime).getTime() + parseDurationToMs(shift.duration)).toISOString(),
-          allDay: false, 
-          extendedProps: {
-            shiftStatus: shift.status,
-            recurring: shift.recurring,
-            position: shift.position?.id,
-            employee: shift.employee?.id,
+        const events = await Promise.all(response.data.map(async (shift) => {
+          let position = shift.position;
+  
+          // If position is just an ID, fetch the full position object
+          if (position && typeof position === 'number') {
+            const positionRes = await axios.get(`${kBaseURL}/team/positions/${position}`, { headers });
+            position = positionRes.data;
           }
+  
+          return {
+            id: shift.id,
+            title: position?.title || 'No Position',
+            start: shift.starttime,
+            end: new Date(new Date(shift.starttime).getTime() + parseDurationToMs(shift.duration)).toISOString(),
+            allDay: false, 
+            extendedProps: {
+              shiftStatus: shift.status,
+              recurring: shift.recurring,
+              position,  // Now position is the full object
+              employee: shift.employee?.id,
+            }
+          };
         }));
+  
         setCurrentEvents(events);
       } catch (error) {
         console.error("Error fetching events:", error);
@@ -53,6 +123,8 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
     fetchEvents();
   }, [user.company]);
   
+
+
   function parseDurationToMs(durationStr) {
     const match = durationStr.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
     if (!match) return 0;
@@ -81,7 +153,7 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
 
     try {
       const headers = { 'X-Company-ID': user.company };
-      const res = await axios.post("http://localhost:8000/dash/", {
+      const res = await axios.post(`${kBaseURL}/dash/`, {
         starttime: startISO,
         duration: calculateDuration(startISO, endISO),
         status: formData.shiftStatus,
@@ -131,7 +203,7 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
     const shiftId = clickInfo.event.id;
     try {
       const headers = { 'X-Company-ID': user.company };
-      const response = await axios.get(`http://localhost:8000/dash/${shiftId}/`, { headers });
+      const response = await axios.get(`${kBaseURL}/dash/${shiftId}/`, { headers });
       setEventDetailData(response.data);
       setShowEventDetail(true);
       setShowForm(false);
@@ -150,7 +222,7 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
   const handleUpdateShift = async (updatedData) => {
     try {
       const headers = { 'X-Company-ID': user.company };
-      await axios.put(`http://localhost:8000/dash/${updatedData.id}/`, {
+      await axios.put(`${kBaseURL}/dash/${updatedData.id}/`, {
         starttime: eventDetailData.starttime, 
         duration: eventDetailData.duration,
         status: updatedData.shiftStatus,
@@ -187,7 +259,7 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
   const handleDeleteShift = async (idToDelete) => {
     try {
       const headers = { 'X-Company-ID': user.company };
-      await axios.delete(`http://localhost:8000/dash/${idToDelete}/`, { headers });
+      await axios.delete(`${kBaseURL}/dash/${idToDelete}/`, { headers });
 
       setCurrentEvents((prevEvents) => prevEvents.filter(evt => evt.id !== idToDelete));
       alert('Shift deleted');

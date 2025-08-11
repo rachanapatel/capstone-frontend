@@ -7,6 +7,8 @@ import { useState, useEffect } from 'react';
 import AddPositionDialog from './AddPositionDialog'
 import axios from "axios";
 
+// const kBaseURL='http://localhost:8000';
+const kBaseURL = 'https://ets-trial-backend.onrender.com';
 
 const Form = ({ user }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -16,7 +18,7 @@ const Form = ({ user }) => {
   useEffect(() => {
     const fetchPositions = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/team/positions/", {
+        const response = await axios.get(`${kBaseURL}/team/positions/`, {
           headers: {
             "X-Company-ID": user.company,
           },
@@ -38,7 +40,7 @@ const Form = ({ user }) => {
     console.log("Submitting position ID:", values.position);
     try {
       const headers = { "X-Company-ID": user.company }; 
-      const response = await axios.post("http://localhost:8000/team/employees/", {
+      const response = await axios.post(`${kBaseURL}/team/employees/`, {
         name: values.name,      
         contact: values.email, 
         position_id: values.position, 

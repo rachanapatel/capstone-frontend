@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  TextField,
-  MenuItem,
-  Typography,
-  CircularProgress,
-} from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem, Typography, CircularProgress,} from "@mui/material";
 import axios from "axios";
+
+// const kBaseURL='http://localhost:8000';
+const kBaseURL = 'https://ets-trial-backend.onrender.com';
 
 export default function EmployeeModal({ employeeId, open, onClose }) {
   const [mode, setMode] = useState("view"); // 'view' | 'edit' | 'addPosition'
@@ -35,8 +28,8 @@ export default function EmployeeModal({ employeeId, open, onClose }) {
     if (!employeeId || !open) return;
 
     setLoading(true);
-    const fetchEmployee = axios.get(`/team/employees/${employeeId}`);
-    const fetchPositions = axios.get(`/team/positions`);
+    const fetchEmployee = axios.get(`${kBaseURL}/team/employees/${employeeId}`);
+    const fetchPositions = axios.get(`${kBaseURL}/team/positions`);
 
     Promise.all([fetchEmployee, fetchPositions])
       .then(([empRes, posRes]) => {

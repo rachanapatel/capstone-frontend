@@ -28,10 +28,14 @@ const Team = ({ user }) => {
   const handleOpenNewEmployeeForm = () => setShowNewEmployeeForm(true);
   const handleCloseNewEmployeeForm = () => setShowNewEmployeeForm(false); 
 
+  // const kBaseURL='http://localhost:8000';
+  const kBaseURL = 'https://ets-trial-backend.onrender.com';
+
   useEffect(() => {
     async function fetchTeamData() {
       try {
-        const response = await axios.get("http://localhost:8000/team/");
+        // const response = await axios.get("http://localhost:8000/team/");
+        const response = await axios.get(`${kBaseURL}/team/`);
         setTeamData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);

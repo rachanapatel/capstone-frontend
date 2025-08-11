@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+// const kBaseURL='http://localhost:8000';
+const kBaseURL = 'https://ets-trial-backend.onrender.com';
+
 const Login = ({ setUser }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -14,10 +17,10 @@ const Login = ({ setUser }) => {
   
     try {
       console.log("Sending axios request...");
-      const response = await axios.post('http://localhost:8000/login/', {
+      const response = await axios.post(`${kBaseURL}/login/`, {
         username,
         password
-      });
+      }); 
       console.log("Axios response:", response.data);
   
       const user = response.data;

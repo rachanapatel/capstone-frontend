@@ -5,6 +5,9 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button,} from "@mui/
 import axios from "axios";
 import './index.css';
 
+// const kBaseURL='http://localhost:8000';
+const kBaseURL = 'https://ets-trial-backend.onrender.com';
+
 const validationSchema = Yup.object({
   position: Yup.string().required('Position is required'),
   employee: Yup.string(),
@@ -21,8 +24,8 @@ function ShiftForm({ onClose, onCreate, onUpdate, onDelete, user, shift = null }
       try {
         const headers = { 'X-Company-ID': user.company };
         const [positionsRes, employeesRes] = await Promise.all([
-          axios.get('http://localhost:8000/team/positions/', { headers }),
-          axios.get('http://localhost:8000/team/employees/', { headers }),
+          axios.get(`${kBaseURL}/team/positions/`, { headers }),
+          axios.get(`${kBaseURL}/team/employees/`, { headers }),
         ]);
         setPositions(positionsRes.data);
         setEmployees(employeesRes.data);
@@ -37,7 +40,7 @@ function ShiftForm({ onClose, onCreate, onUpdate, onDelete, user, shift = null }
     if (!shift?.id) return;
     try {
       const headers = { 'X-Company-ID': user.company };
-      await axios.delete(`http://localhost:8000/dash/${shift.id}/`, { headers });
+      await axios.delete(`${kBaseURL}/dash/${shift.id}/`, { headers });
       onDelete?.(shift.id);
       onClose();
 

@@ -3,6 +3,9 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, M
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 
+// const kBaseURL='http://localhost:8000';
+const kBaseURL = 'https://ets-trial-backend.onrender.com';
+
 function EmployeeDetail({ open, employeeData, onClose, onUpdate, onDelete, user }) {
   const [editMode, setEditMode] = useState(false);
   const [name, setName] = useState("");
@@ -23,7 +26,7 @@ function EmployeeDetail({ open, employeeData, onClose, onUpdate, onDelete, user 
     async function fetchPositions() {
       try {
         const headers = { "X-Company-ID": user.company };
-        const res = await axios.get("http://localhost:8000/team/positions/", {
+        const res = await axios.get(`${kBaseURL}/team/positions/`, {
           headers,
         });
         setPositions(res.data);
@@ -55,11 +58,10 @@ function EmployeeDetail({ open, employeeData, onClose, onUpdate, onDelete, user 
       };
       console.log("Updating employee with payload:", payload);
       console.log("Using headers:", headers);
-      const res = await axios.put(
-        `http://localhost:8000/team/employees/${employeeData.id}/`,
+      const res = await axios.put(`${kBaseURL}/team/employees/${employeeData.id}/`,
         payload,
         { headers }
-      );
+      ); 
       onUpdate(res.data);
       setEditMode(false);
     } catch (error) {
@@ -75,7 +77,7 @@ function EmployeeDetail({ open, employeeData, onClose, onUpdate, onDelete, user 
     if (!window.confirm(`Are you sure you want to delete employee "${name}"?`)) return;
     try {
       const headers = { "X-Company-ID": user.company };
-      await axios.delete(`http://localhost:8000/team/employees/${employeeData.id}/`, {
+      await axios.delete(`${kBaseURL}/team/employees/${employeeData.id}/`, {
         headers,
       });
       onDelete(employeeData.id);
