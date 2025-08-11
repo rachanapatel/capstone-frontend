@@ -1,33 +1,86 @@
 // import { Box, Typography, useTheme } from "@mui/material";
 // import { DataGrid } from "@mui/x-data-grid";
 // import { colors } from "../../theme";
-// import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-// import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
-// import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
-// import Header from "../global/Header";
 // import { Link } from 'react-router-dom';
 // import Pagetitles from "../../Pagetitles";
 // import { useState, useEffect } from "react";
 // import axios from "axios";
+// import EmployeeDetail from './EmployeeDetail';
+// import PositionDetail from './PositionDetail';
 
-  
-
-// const Team = () => {
+// const Team = ({ user }) => {
 //   const theme = useTheme();
 //   const [teamData, setTeamData] = useState([]);
-
+//   const [selectedEmployee, setSelectedEmployee] = useState(null);
+//   const [selectedPosition, setSelectedPosition] = useState(null);
+//   const [showEmployeeModal, setShowEmployeeModal] = useState(false);
+//   const [showPositionModal, setShowPositionModal] = useState(false);
 
 //   useEffect(() => {
 //     async function fetchTeamData() {
 //       try {
 //         const response = await axios.get("http://localhost:8000/team/");
-//         setTeamData(response.data); // store the data to be used in DataGrid
+//         setTeamData(response.data);
 //       } catch (error) {
 //         console.error("Error fetching data:", error);
 //       }
-//     }    
+//     }
 //     fetchTeamData();
 //   }, []);
+
+
+//   const handleEmployeeRowClick = (params) => {
+//     console.log('Row click params:', params);
+//     if (!params || !params.row) {
+//       console.error('params or params.row is missing!');
+//       return;
+//     }    
+//     setSelectedEmployee(params.row);
+//     setShowEmployeeModal(true);
+//   };
+
+//   const handlePositionClick = (position) => {
+//     setSelectedPosition(position);
+//     setShowPositionModal(true);
+//   };
+
+//   // Callbacks for Employee Modal updates/deletes
+//   const handleEmployeeUpdate = (updatedEmployee) => {
+//     setTeamData((prev) =>
+//       prev.map((emp) => (emp.id === updatedEmployee.id ? updatedEmployee : emp))
+//     );
+//     setShowEmployeeModal(false);
+//     setSelectedEmployee(null);
+//   };
+
+//   const handleEmployeeDelete = (deletedEmployeeId) => {
+//     setTeamData((prev) => prev.filter((emp) => emp.id !== deletedEmployeeId));
+//     setShowEmployeeModal(false);
+//     setSelectedEmployee(null);
+//   };
+
+//   // Callbacks for Position Modal updates/deletes
+//   const handlePositionUpdate = (updatedPosition) => {
+//     // Update position title in all affected employees
+//     setTeamData((prev) =>
+//       prev.map((emp) =>
+//         emp.position.id === updatedPosition.id
+//           ? { ...emp, position: updatedPosition }
+//           : emp
+//       )
+//     );
+//     setShowPositionModal(false);
+//     setSelectedPosition(null);
+//   };
+
+//   const handlePositionDelete = (deletedPositionId) => {
+//     // Remove position from employees or handle as needed
+//     setTeamData((prev) =>
+//       prev.filter((emp) => emp.position.id !== deletedPositionId)
+//     );
+//     setShowPositionModal(false);
+//     setSelectedPosition(null);
+//   };
 
 
 //   const columns = [
@@ -38,47 +91,31 @@
 //       cellClassName: "name-column--cell",
 //     },
 //     {
-//       field: "email",
+//       field: "contact",
 //       headerName: "Contact Information",
 //       flex: 1,
 //     },
 //     {
 //       field: "position",
 //       headerName: "Position",
-//       type: "text",
-//       headerAlign: "left",
-//       align: "left",
-//     },    
-//     // {
-//     //   field: "accessLevel",
-//     //   headerName: "Access Level",
-//     //   flex: 1,
-//     //   renderCell: ({ row: { access } }) => {
-//     //     return (
-//     //       <Box
-//     //         width="60%"
-//     //         m="0 auto"
-//     //         p="5px"
-//     //         display="flex"
-//     //         justifyContent="center"
-//     //         borderRadius="4px"
-//     //       >
-//     //         {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
-//     //         {access === "manager" && <SecurityOutlinedIcon />}
-//     //         <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-//     //           {access}
-//     //         </Typography>
-//     //       </Box>
-//     //     );
-//     //   },
-//     // },
+//       flex: 1,
+//       // valueGetter: (params) => params.row.position?.title || '',
+//       renderCell: (params) => {
+//         return params.row?.position?.title || "";
+//       },
+//     },
 //   ];
+  
 
 //   return (
 //     <Box m="20px">
 //       <Pagetitles title="TEAM" subtitle="Roster" />
+
+//       <Box mb={2}>
+//         <Link to="/form">Add Employee</Link> | <Link to="/position">Add Position</Link>
+//       </Box>
+
 //       <Box
-//         m="40px 0 0 0"
 //         height="75vh"
 //         sx={{
 //           "& .MuiDataGrid-root": {
@@ -104,14 +141,50 @@
 //           "& .MuiCheckbox-root": {
 //             color: `${colors.greenAccent[200]} !important`,
 //           },
+//           "button": {
+//             fontFamily: 'inherit',
+//           }
 //         }}
 //       >
-//         <div>
-//             <Link to="/form">Add Employee</Link> | <Link to="/position">Add Position</Link>
-//             </div>
 
-//         <DataGrid rows={teamData} columns={columns} />
+//       <Box onClick={() => console.log('Box clicked')}>
+//         <DataGrid
+//           rows={teamData}
+//           columns={columns}
+//           getRowId={(row) => row.id}
+//           onRowClick={handleEmployeeRowClick}
+//         />
 //       </Box>
+
+//       </Box>
+
+//       {showEmployeeModal && selectedEmployee && (
+//         <EmployeeDetail
+//           open={showEmployeeModal}
+//           employeeData={selectedEmployee}
+//           onClose={() => {
+//             setShowEmployeeModal(false);
+//             setSelectedEmployee(null);
+//           }}
+//           onUpdate={handleEmployeeUpdate}
+//           onDelete={handleEmployeeDelete}
+//           user={user}
+//         />
+//       )}
+
+//       {showPositionModal && selectedPosition && (
+//         <PositionDetail
+//           open={showPositionModal}
+//           positionData={selectedPosition}
+//           onClose={() => {
+//             setShowPositionModal(false);
+//             setSelectedPosition(null);
+//           }}
+//           onUpdate={handlePositionUpdate}
+//           onDelete={handlePositionDelete}
+//           user={user}
+//         />
+//       )}
 //     </Box>
 //   );
 // };
@@ -119,81 +192,83 @@
 // export default Team;
 
 
-// const rows = [
-//     {
-//       id: 1,
-//       name: "John Doe",
-//       position: "Manager",
-//       email: "johndoe@example.com",
-//       accessLevel: "manager"},
-//     {id: 2,
-//         name: "Jane Smith",
-//       position: "Cashier",
-//       email: "janesmith@example.com",
-//       accessLevel: "user",
-//     },
-//     {
-//       id: 3,
-//       name: "Sam Smith",
-//       position: "Cashier",
-//       email: "sam@example.com",
-//       accessLevel: "user",
-//     },
-//   ];
-
-
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { colors } from "../../theme";
-import Header from "../global/Header";
 import { Link } from "react-router-dom";
 import Pagetitles from "../../Pagetitles";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import EmployeeDetail from './EmployeeDetail'
+import EmployeeDetail from "./EmployeeDetail";
+import PositionDetail from "./PositionDetail";
 
 const Team = ({ user }) => {
   const theme = useTheme();
   const [teamData, setTeamData] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [selectedPosition, setSelectedPosition] = useState(null);
+  const [showEmployeeModal, setShowEmployeeModal] = useState(false);
+  const [showPositionModal, setShowPositionModal] = useState(false);
 
-  // For modal state
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
-  const [modalOpen, setModalOpen] = useState(false);
+  useEffect(() => {
+    async function fetchTeamData() {
+      try {
+        const response = await axios.get("http://localhost:8000/team/");
+        setTeamData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    fetchTeamData();
+  }, []);
 
-  // Fetch team data function
-  const fetchTeamData = async () => {
-    try {
-      const headers = { "X-Company-ID": user.company };
-      const response = await axios.get("http://localhost:8000/team/employees/", { headers });
-      setTeamData(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
+  // Open employee modal on clicking name or contact cells
+  const handleCellClick = (params, event) => {
+    event.stopPropagation(); // prevent row click
+    if (params.field === "name" || params.field === "contact") {
+      setSelectedEmployee(params.row);
+      setShowEmployeeModal(true);
+    } else if (params.field === "position") {
+      setSelectedPosition(params.row.position);
+      setShowPositionModal(true);
     }
   };
 
-  // Fetch data on mount and after updates/deletes
-  useEffect(() => {
-    fetchTeamData();
-  }, [user.company]);
-
-  // Handle row click to open modal
-  const handleRowClick = (params) => {
-    setSelectedEmployeeId(params.id);
-    setModalOpen(true);
+  // Callbacks for Employee Modal updates/deletes
+  const handleEmployeeUpdate = (updatedEmployee) => {
+    setTeamData((prev) =>
+      prev.map((emp) => (emp.id === updatedEmployee.id ? updatedEmployee : emp))
+    );
+    setShowEmployeeModal(false);
+    setSelectedEmployee(null);
   };
 
-  // Modal callbacks
-  const handleModalClose = () => {
-    setModalOpen(false);
-    setSelectedEmployeeId(null);
+  const handleEmployeeDelete = (deletedEmployeeId) => {
+    setTeamData((prev) => prev.filter((emp) => emp.id !== deletedEmployeeId));
+    setShowEmployeeModal(false);
+    setSelectedEmployee(null);
   };
 
-  const handleEmployeeUpdated = () => {
-    fetchTeamData();
+  // Callbacks for Position Modal updates/deletes
+  const handlePositionUpdate = (updatedPosition) => {
+    setTeamData((prev) =>
+      prev.map((emp) =>
+        emp.position.id === updatedPosition.id
+          ? { ...emp, position: updatedPosition }
+          : emp
+      )
+    );
+    setShowPositionModal(false);
+    setSelectedPosition(null);
   };
 
-  const handleEmployeeDeleted = () => {
-    fetchTeamData();
+  const handlePositionDelete = (deletedPositionId) => {
+    // Here you might want to handle employees with deleted positions differently
+    setTeamData((prev) =>
+      prev.filter((emp) => emp.position.id !== deletedPositionId)
+    );
+    setShowPositionModal(false);
+    setSelectedPosition(null);
   };
 
   const columns = [
@@ -201,28 +276,34 @@ const Team = ({ user }) => {
       field: "name",
       headerName: "Team Member",
       flex: 1,
-      cellClassName: "name-column--cell",
+      cellClassName: "clickable-cell",
     },
     {
       field: "contact",
       headerName: "Contact Information",
       flex: 1,
+      cellClassName: "clickable-cell",
     },
     {
       field: "position",
       headerName: "Position",
-      type: "text",
-      headerAlign: "left",
-      align: "left",
-      valueGetter: (params) => params.row.position?.title || "", // assuming position is an object with title
+      flex: 1,
+      renderCell: (params) => {
+        return params.row?.position?.title || "";
+      },
+      cellClassName: "clickable-cell",
     },
   ];
 
   return (
     <Box m="20px">
       <Pagetitles title="TEAM" subtitle="Roster" />
+
+      <Box mb={2}>
+        <Link to="/form">Add Employee</Link> | <Link to="/position">Add Position</Link>
+      </Box>
+
       <Box
-        m="40px 0 0 0"
         height="75vh"
         sx={{
           "& .MuiDataGrid-root": {
@@ -248,27 +329,47 @@ const Team = ({ user }) => {
           "& .MuiCheckbox-root": {
             color: `${colors.greenAccent[200]} !important`,
           },
+          // Styling clickable cells with pointer cursor and underline on hover
+          "& .clickable-cell": {
+            cursor: "pointer",
+            textDecoration: "underline",
+            color: colors.greenAccent[300],
+          },
         }}
       >
-        <div>
-          <Link to="/form">Add Employee</Link> | <Link to="/position">Add Position</Link>
-        </div>
-
         <DataGrid
           rows={teamData}
           columns={columns}
-          onRowClick={handleRowClick}
-          getRowId={(row) => row.id} // ensure unique id from backend
+          getRowId={(row) => row.id}
+          onCellClick={handleCellClick}
+          disableSelectionOnClick
         />
       </Box>
 
-      {modalOpen && selectedEmployeeId && (
+      {showEmployeeModal && selectedEmployee && (
         <EmployeeDetail
-          open={modalOpen}
-          employeeId={selectedEmployeeId}
-          onClose={handleModalClose}
-          onUpdated={handleEmployeeUpdated}
-          onDeleted={handleEmployeeDeleted}
+          open={showEmployeeModal}
+          employeeData={selectedEmployee}
+          onClose={() => {
+            setShowEmployeeModal(false);
+            setSelectedEmployee(null);
+          }}
+          onUpdate={handleEmployeeUpdate}
+          onDelete={handleEmployeeDelete}
+          user={user}
+        />
+      )}
+
+      {showPositionModal && selectedPosition && (
+        <PositionDetail
+          open={showPositionModal}
+          positionData={selectedPosition}
+          onClose={() => {
+            setShowPositionModal(false);
+            setSelectedPosition(null);
+          }}
+          onUpdate={handlePositionUpdate}
+          onDelete={handlePositionDelete}
           user={user}
         />
       )}
