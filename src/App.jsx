@@ -4,6 +4,7 @@ import Header from './scenes/global/Header';
 import Sidebar from './scenes/global/Sidebar';
 // import { Routes, Route } from "react-router-dom";
 import Dashboard from './scenes/dashboard';
+import NonManagerDash from './scenes/dashboard/NonManagerDash';
 import Team from './scenes/team';
 import Homepage from './scenes/landing/Homepage';
 import Login from './scenes/landing/Login';
@@ -16,6 +17,16 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
 export const URL = 'https://ets-trial-backend.onrender.com';
 
+const NoAccess = () => (
+  <div style={{ color: 'red', padding: '20px', textAlign: 'center' }}>
+    No Access - You must be a manager to view this page.
+    </div>);
+
+
+const ComingSoon = () => (
+  <div style={{ color: 'red', padding: '20px', textAlign: 'center' }}>
+    No Access - Page under development.
+    </div>);
 
 
 function App() {
@@ -52,20 +63,18 @@ function App() {
           <main className="main-content">
             <Routes>
               <Route path="/dash" element={
-                <RequireAuth><Dashboard user={user} /></RequireAuth>
-              } />
+                  <RequireAuth>{user.is_manager ? <Dashboard user={user} /> : 
+                  <NonManagerDash user={user} />}</RequireAuth>
+                } 
+              />
               <Route path="/team" element={
                 <RequireAuth><Team user={user} /></RequireAuth>
               } />
-              <Route path="/form" element={
-                <RequireAuth><Form user={user} /></RequireAuth> 
-              } /> 
-              <Route path="/position" element={
-                <RequireAuth><PositionForm user={user} /></RequireAuth> 
-              } />                            
-              <Route path="/calendar" element={
-                <RequireAuth><Dashboard user={user} /></RequireAuth> 
-              } />
+              <Route path="/form" element={user?.is_manager ? (
+                <RequireAuth><Team user={user} /></RequireAuth>) : (<NoAccess />)} /> 
+              <Route path="/position" element={user?.is_manager ? (
+                <RequireAuth><Team user={user} /></RequireAuth>) : (<NoAccess />)} />                            
+              <Route path="/calendar" element={<ComingSoon />} />
               <Route path="*" element={<Navigate to="/dash" />} />
             </Routes>
           </main>

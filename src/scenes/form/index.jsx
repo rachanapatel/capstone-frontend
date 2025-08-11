@@ -36,17 +36,24 @@ const Form = ({ user }) => {
 
   const handleFormSubmit = async (values) => {
     console.log("Submitting position ID:", values.position);
+    // try {
+    //   const headers = { "X-Company-ID": user.company };
+    //   const response = await axios.post("http://localhost:8000/team/employees/", {
+    //     name: values.name,
+    //     contact: values.email,
+    //     position_id: values.position,
+    //   },{ headers });
+
     try {
-      const headers = { "X-Company-ID": user.company };
+      const headers = { "X-Company-ID": user.company }; 
       const response = await axios.post("http://localhost:8000/team/employees/", {
-        name: values.name,
-        contact: values.email,
-        position_id: values.position,
-        company: user.company,
-      },
-      // { headers }
-    );
+        name: values.name,      
+        contact: values.email, 
+        position_id: values.position, 
+      }, { headers });
       console.log("Form submitted successfully:", response.data);
+      const username = response.data.username;
+      alert(`Employee created! Their username is: ${username}`);
     } catch (error) {
       console.error("Error updating employee:", error);
       if (error.response) {

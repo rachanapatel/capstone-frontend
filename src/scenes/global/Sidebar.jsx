@@ -5,12 +5,9 @@ import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import "./Sidebar.css";
-
-
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
@@ -31,7 +28,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
   );
 };
 
-const Sidebar = () => {
+const Sidebar = ({ user }) => {
   const theme = useTheme();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
@@ -90,10 +87,15 @@ const Sidebar = () => {
               TEAM
             </Typography>
             <Item title="Manage Team" to="/team" icon={<PeopleOutlinedIcon />} selected={selected} setSelected={setSelected} />
-            <Item title="Contacts Information" to="/team/position" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />
-            {/* <Item title="Invoices Balances" to="/invoices" icon={<ReceiptOutlinedIcon />} selected={selected} setSelected={setSelected} /> */}
-            <Item title="New Member" to="/form" icon={<PersonOutlinedIcon />} selected={selected} setSelected={setSelected} />
-            <Item title="New Position" to="/position" icon={<PersonOutlinedIcon />} selected={selected} setSelected={setSelected} />
+            {/* <Item title="New Member" to="/form" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />
+            <Item title="New Position" to="/position" icon={<PersonOutlinedIcon />} selected={selected} setSelected={setSelected} /> */}
+            {user.is_manager && (
+              <>
+              <Item title="New Member" to="/form" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />
+              <Item title="New Position" to="/position" icon={<PersonOutlinedIcon />} selected={selected} setSelected={setSelected} />
+              </>
+            )}
+
 
             <Typography variant="h6" className="section-title">
               PLAN

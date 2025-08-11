@@ -20,7 +20,7 @@ function EmployeeDetail({ open, employeeData, onClose, onUpdate, onDelete, user 
   const [positionId, setPositionId] = useState(null);
   const [positions, setPositions] = useState([]);
 
-  // Load employee details and positions when modal opens or employeeData changes
+
   useEffect(() => {
     if (!open || !employeeData) return;
 

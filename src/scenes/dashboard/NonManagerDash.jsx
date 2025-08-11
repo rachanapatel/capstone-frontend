@@ -12,32 +12,18 @@ import ShiftForm from './ShiftForm';
 import EventDetail from './EventDetail'
 import './index.css';
 
-const Dashboard = ({ user }) => {
+const NonManagerDash = ({ user }) => {
   const [currentEvents, setCurrentEvents] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedDateInfo, setSelectedDateInfo] = useState(null);
   const [eventDetailData, setEventDetailData] = useState(null);
   const [showEventDetail, setShowEventDetail] = useState(false);
 
-// Get the user object from localStorage
+
 const savedUser = JSON.parse(localStorage.getItem('user'));
   console.log("User from localStorage:", savedUser);
-// If position is saved under `position` in the user object:
   console.log("User's Position:", savedUser.position);
 
-  // // Fetch all saved events on mount
-  // useEffect(() => {
-  //   async function fetchEvents() {
-  //     try {
-  //       const headers = { 'X-Company-ID': user.company };
-  //       const response = await axios.get("http://localhost:8000/dash/", { headers });
-  //       setCurrentEvents(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching events:", error);
-  //     }
-  //   }
-  //   fetchEvents();
-  // }, [user.company]);
 
   useEffect(() => {
     async function fetchEvents() {
@@ -215,7 +201,9 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
 
   return (
     <Box className="calendar-container">
-      <Pagetitles title="View Schedule" subtitle="Shift Scheduler" />
+      <Pagetitles title="Your Schedule" 
+    //   subtitle="Shift Scheduler" 
+      />
       <Box className="calendar-layout">
 
         {/* CALENDAR SIDEBAR */}
@@ -288,4 +276,4 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
   );
 };
 
-export default Dashboard;
+export default NonManagerDash;
