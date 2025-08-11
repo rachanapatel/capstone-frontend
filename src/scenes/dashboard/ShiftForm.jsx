@@ -36,9 +36,11 @@ function ShiftForm({ onClose, onCreate, onUpdate, onDelete, user, shift = null }
   const handleDelete = async () => {
     if (!shift?.id) return;
     try {
-      await axios.delete(`http://localhost:8000/dash/${shift.id}/`);
+      const headers = { 'X-Company-ID': user.company };
+      await axios.delete(`http://localhost:8000/dash/${shift.id}/`, { headers });
       onDelete?.(shift.id);
       onClose();
+
     } catch (err) {
       console.error('Error deleting shift:', err);
       alert('Failed to delete shift');
@@ -84,7 +86,7 @@ function ShiftForm({ onClose, onCreate, onUpdate, onDelete, user, shift = null }
                     const matchingEmployee = employees.find(
                       emp => emp.id === parseInt(values.employee)
                     );
-                    const employeePositionId = matchingEmployee ? matchingEmployee.position : null;
+                    const employeePositionId = matchingEmployee ? matchingEmployee.position?.id : null;
                     const isSelectable = !values.employee || pos.id === employeePositionId;
                     return (
                       <option key={pos.id} value={pos.id} disabled={!isSelectable}>
@@ -117,7 +119,8 @@ function ShiftForm({ onClose, onCreate, onUpdate, onDelete, user, shift = null }
                 >
                   <option value="">Select employee</option>
                   {employees.map((emp) => {
-                    const hasPosition = !values.position || emp.position === parseInt(values.position);
+                    const hasPosition = !values.position || emp.position?.id === parseInt(values.position);
+
                     return (
                       <option key={emp.id} value={emp.id} disabled={!hasPosition}>
                         {emp.name}
