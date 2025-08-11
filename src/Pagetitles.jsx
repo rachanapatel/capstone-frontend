@@ -1,5 +1,4 @@
 import { Typography, Box } from "@mui/material";
-// Import CSS file for styling
 import './Pagetitles.css';
 
 const Pagetitles = ({ title, subtitle }) => {

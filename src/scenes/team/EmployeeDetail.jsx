@@ -1,15 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  TextField,
-  MenuItem,
-  IconButton,
-  Typography,
-} from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem, IconButton, Typography,} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 
@@ -29,7 +19,7 @@ function EmployeeDetail({ open, employeeData, onClose, onUpdate, onDelete, user 
     setPositionId(employeeData.position?.id || null);
     setEditMode(false);
 
-    // Fetch positions for company dropdown
+
     async function fetchPositions() {
       try {
         const headers = { "X-Company-ID": user.company };
@@ -61,7 +51,6 @@ function EmployeeDetail({ open, employeeData, onClose, onUpdate, onDelete, user 
       const payload = {
         name,
         contact,
-        // position: positionId,
         position_id: positionId,
       };
       console.log("Updating employee with payload:", payload);

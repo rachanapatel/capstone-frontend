@@ -19,25 +19,11 @@ const Dashboard = ({ user }) => {
   const [eventDetailData, setEventDetailData] = useState(null);
   const [showEventDetail, setShowEventDetail] = useState(false);
 
-// Get the user object from localStorage
+
 const savedUser = JSON.parse(localStorage.getItem('user'));
   console.log("User from localStorage:", savedUser);
-// If position is saved under `position` in the user object:
   console.log("User's Position:", savedUser.position);
 
-  // // Fetch all saved events on mount
-  // useEffect(() => {
-  //   async function fetchEvents() {
-  //     try {
-  //       const headers = { 'X-Company-ID': user.company };
-  //       const response = await axios.get("http://localhost:8000/dash/", { headers });
-  //       setCurrentEvents(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching events:", error);
-  //     }
-  //   }
-  //   fetchEvents();
-  // }, [user.company]);
 
   useEffect(() => {
     async function fetchEvents() {
@@ -58,7 +44,6 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
             employee: shift.employee?.id,
           }
         }));
-  
         setCurrentEvents(events);
       } catch (error) {
         console.error("Error fetching events:", error);

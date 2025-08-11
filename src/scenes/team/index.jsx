@@ -10,6 +10,7 @@ import PositionDetail from "./PositionDetail";
 import PositionForm from "../PositionForm";
 import { Dialog, DialogTitle, DialogContent, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+
 import Form from '../form/index';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
@@ -196,7 +197,7 @@ const Team = ({ user }) => {
           "& .MuiCheckbox-root": {
             color: `${colors.greenAccent[200]} !important`,
           },
-          // Styling clickable cells with pointer cursor and underline on hover
+          
           "& .clickable-cell": {
             cursor: "pointer",
             textDecoration: "underline",

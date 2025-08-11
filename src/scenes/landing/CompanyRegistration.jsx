@@ -1,4 +1,3 @@
-// CompanyRegistration.jsx (or Register.jsx)
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -13,7 +12,7 @@ const CompanyRegistration = () => {
   const navigate = useNavigate();
 
   const handleRegister = async (event) => {
-    event.preventDefault(); // Prevent default form submission
+    event.preventDefault(); 
 
     const storedCompanies = JSON.parse(localStorage.getItem("companies")) || [];
     const usernameExists = storedCompanies.some((u) => u.managerUsername === managerUsername);
@@ -37,12 +36,8 @@ const CompanyRegistration = () => {
       });
       
       console.log('Successful signup:', response.data);
-      // Optionally, clear the form or redirect
       setCompanyName(''); setManagerName(''); setManagerUsername(''); setManagerPassword('');
     } 
-    // catch (error) {
-    //   console.error('Signup error', error);
-    // }
     catch (error) {
       if (error.response && error.response.data) {
         console.error('Signup error', error.response.data);
@@ -87,7 +82,6 @@ const CompanyRegistration = () => {
           placeholder="Password"
           value={managerPassword}
           onChange={(e) => setManagerPassword(e.target.value)}
-          // required
         />
         <button type="submit">Create Account</button>
       </form>

@@ -19,9 +19,9 @@ const NonManagerDash = ({ user }) => {
     const [eventDetailData, setEventDetailData] = useState(null);
     const [showEventDetail, setShowEventDetail] = useState(false);
   
-    // Get the logged-in user's ID (from props or localStorage)
+    
     const savedUser = JSON.parse(localStorage.getItem('user'));
-    const userId = savedUser ? savedUser.id : user.id;  // Get user ID from localStorage or props
+    const userId = savedUser ? savedUser.id : user.id;  
   
     console.log("User from localStorage:", savedUser);
     console.log("User's Position:", savedUser?.position);
@@ -32,9 +32,9 @@ const NonManagerDash = ({ user }) => {
           const headers = { 'X-Company-ID': user.company };
           const response = await axios.get("http://localhost:8000/dash/", { headers });
   
-          // Filter events to only those where the employee ID matches the logged-in user
+
           const events = response.data
-            .filter(shift => shift.employee?.id === userId)  // Filter events by employee ID
+            .filter(shift => shift.employee?.id === userId)  
             .map(shift => ({
               id: shift.id,
               title: shift.position?.title || 'No Position',

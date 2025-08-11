@@ -1,4 +1,3 @@
-// Login.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -8,59 +7,6 @@ const Login = ({ setUser }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
-  // const handleLogin = (e) => {
-  //   e.preventDefault();
-
-  //   // Fake user DB — replace with your real check
-  //   const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
-  //   const foundUser = storedUsers.find(
-  //     (u) => u.username === username && u.password === password
-  //   );
-
-  //   if (foundUser) {
-  //     setUser(foundUser);
-  //     localStorage.setItem("user", JSON.stringify(foundUser));
-  //     navigate("/dash");
-  //   } else {
-  //     setError("Invalid username or password");
-  //   }
-  // };
-
-  // const handleLogin = async (event) => {
-  //   event.preventDefault();
-  //   console.log("handleLogin called", { username, password });
-  
-  //   try {
-  //     const response = await axios.post('http://localhost:8000/login/', {
-  //       username,
-  //       password
-  //     });
-  
-  //     const user = response.data;
-  //     setUser(user);
-  //     localStorage.setItem("user", JSON.stringify(user));
-  //     navigate("/dash");
-  //   } 
-  //   // catch (err) {
-  //   //   if (err.response && err.response.status === 401) {
-  //   //     setError("Invalid username or password");
-  //   //   } else {
-  //   //     setError("Server error. Please try again.");
-  //   //   }
-  //   // }
-
-  // catch (err) {
-  //   if (err.response) {
-  //     if (err.response.status === 401) {
-  //       setError(err.response.data.detail || "Invalid username or password");
-  //     } else {
-  //       setError(`Server error: ${err.response.status}`);
-  //     }
-  //   } else {
-  //     setError("Network error. Please check your connection.");
-  //   }}};
-
 
   const handleLogin = async (event) => {
     event.preventDefault();

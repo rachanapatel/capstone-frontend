@@ -36,14 +36,6 @@ const Form = ({ user }) => {
 
   const handleFormSubmit = async (values) => {
     console.log("Submitting position ID:", values.position);
-    // try {
-    //   const headers = { "X-Company-ID": user.company };
-    //   const response = await axios.post("http://localhost:8000/team/employees/", {
-    //     name: values.name,
-    //     contact: values.email,
-    //     position_id: values.position,
-    //   },{ headers });
-
     try {
       const headers = { "X-Company-ID": user.company }; 
       const response = await axios.post("http://localhost:8000/team/employees/", {
@@ -118,7 +110,6 @@ const Form = ({ user }) => {
                 sx={{ gridColumn: "span 4" }}
               />
 
-              {/* Position Dropdown */}
               <FormControl fullWidth variant="filled" sx={{ gridColumn: "span 4" }}>
                 <InputLabel id="position-label">Position</InputLabel>
                 <Select
@@ -156,7 +147,6 @@ const Form = ({ user }) => {
               </Button>
             </Box>
 
-            {/* Add Position Modal */}
             {showAddPosition && (
               <AddPositionDialog
                 user={user}

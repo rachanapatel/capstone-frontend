@@ -1,5 +1,5 @@
-import { useState } from "react";
 // import { useTheme } from "@mui/material";
+import { useState } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -87,8 +87,6 @@ const Sidebar = ({ user }) => {
               TEAM
             </Typography>
             <Item title="Manage Team" to="/team" icon={<PeopleOutlinedIcon />} selected={selected} setSelected={setSelected} />
-            {/* <Item title="New Member" to="/form" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />
-            <Item title="New Position" to="/position" icon={<PersonOutlinedIcon />} selected={selected} setSelected={setSelected} /> */}
             {user.is_manager && (
               <>
               <Item title="New Member" to="/form" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />

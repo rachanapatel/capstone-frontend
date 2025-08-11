@@ -1,20 +1,20 @@
 // import { useState } from 'react'
+// import { Routes, Route } from "react-router-dom";
+import Form from './scenes/form';
+import PositionForm from './scenes/PositionForm';
+
 import './App.css'
 import Header from './scenes/global/Header';
 import Sidebar from './scenes/global/Sidebar';
-// import { Routes, Route } from "react-router-dom";
 import Dashboard from './scenes/dashboard';
 import NonManagerDash from './scenes/dashboard/NonManagerDash';
 import Team from './scenes/team';
 import Homepage from './scenes/landing/Homepage';
 import Login from './scenes/landing/Login';
 import CompanyRegistration from './scenes/landing/CompanyRegistration';
-import Form from './scenes/form';
-import PositionForm from './scenes/PositionForm';
-// App.jsx
 import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import axios from 'axios';
+
 export const URL = 'https://ets-trial-backend.onrender.com';
 
 const NoAccess = () => (

@@ -1,13 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    TextField,
-    Button,
-  } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, } from "@mui/material";
   
   
   const AddPositionDialog = ({ user, onClose, onPositionCreated }) => {
