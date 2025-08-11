@@ -13,47 +13,51 @@ import EventDetail from './EventDetail'
 import './index.css';
 
 const NonManagerDash = ({ user }) => {
-  const [currentEvents, setCurrentEvents] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [selectedDateInfo, setSelectedDateInfo] = useState(null);
-  const [eventDetailData, setEventDetailData] = useState(null);
-  const [showEventDetail, setShowEventDetail] = useState(false);
-
-
-const savedUser = JSON.parse(localStorage.getItem('user'));
-  console.log("User from localStorage:", savedUser);
-  console.log("User's Position:", savedUser.position);
-
-
-  useEffect(() => {
-    async function fetchEvents() {
-      try {
-        const headers = { 'X-Company-ID': user.company };
-        const response = await axios.get("http://localhost:8000/dash/", { headers });
+    const [currentEvents, setCurrentEvents] = useState([]);
+    const [showForm, setShowForm] = useState(false);
+    const [selectedDateInfo, setSelectedDateInfo] = useState(null);
+    const [eventDetailData, setEventDetailData] = useState(null);
+    const [showEventDetail, setShowEventDetail] = useState(false);
   
-        const events = response.data.map(shift => ({
-          id: shift.id,
-          title: shift.position?.title || 'No Position',
-          start: shift.starttime,
-          end: new Date(new Date(shift.starttime).getTime() + parseDurationToMs(shift.duration)).toISOString(),
-          allDay: false, 
-          extendedProps: {
-            shiftStatus: shift.status,
-            recurring: shift.recurring,
-            position: shift.position?.id,
-            employee: shift.employee?.id,
-          }
-        }));
+    // Get the logged-in user's ID (from props or localStorage)
+    const savedUser = JSON.parse(localStorage.getItem('user'));
+    const userId = savedUser ? savedUser.id : user.id;  // Get user ID from localStorage or props
   
-        setCurrentEvents(events);
-      } catch (error) {
-        console.error("Error fetching events:", error);
+    console.log("User from localStorage:", savedUser);
+    console.log("User's Position:", savedUser?.position);
+  
+    useEffect(() => {
+      async function fetchEvents() {
+        try {
+          const headers = { 'X-Company-ID': user.company };
+          const response = await axios.get("http://localhost:8000/dash/", { headers });
+  
+          // Filter events to only those where the employee ID matches the logged-in user
+          const events = response.data
+            .filter(shift => shift.employee?.id === userId)  // Filter events by employee ID
+            .map(shift => ({
+              id: shift.id,
+              title: shift.position?.title || 'No Position',
+              start: shift.starttime,
+              end: new Date(new Date(shift.starttime).getTime() + parseDurationToMs(shift.duration)).toISOString(),
+              allDay: false, 
+              extendedProps: {
+                shiftStatus: shift.status,
+                recurring: shift.recurring,
+                position: shift.position?.id,
+                employee: shift.employee?.id,
+              }
+            }));
+  
+          setCurrentEvents(events);
+        } catch (error) {
+          console.error("Error fetching events:", error);
+        }
       }
-    }
   
-    fetchEvents();
-  }, [user.company]);
-  
+      fetchEvents();
+    }, [user.company, userId]);
+
   function parseDurationToMs(durationStr) {
     const match = durationStr.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
     if (!match) return 0;
@@ -65,68 +69,6 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
     return ((hours * 60 + minutes) * 60 + seconds) * 1000;
   }
   
-
-  const handleDateClick = (selected) => {
-    setSelectedDateInfo(selected);
-    setShowForm(true);
-    setEventDetailData(null);
-    setShowEventDetail(false);
-  };
-
-  const handleCreateEvent = async (formData) => {
-    const calendarApi = selectedDateInfo.view.calendar;
-    calendarApi.unselect();
-
-    const startISO = selectedDateInfo.startStr;
-    const endISO = selectedDateInfo.endStr;
-
-    try {
-      const headers = { 'X-Company-ID': user.company };
-      const res = await axios.post("http://localhost:8000/dash/", {
-        starttime: startISO,
-        duration: calculateDuration(startISO, endISO),
-        status: formData.shiftStatus,
-        recurring: formData.recurring,
-        position: formData.position,
-        employee: formData.employee || null,
-      }, { headers });
-
-      const newEvent = {
-        id: res.data.id,
-        title: formData.position,
-        start: startISO,
-        end: endISO,
-        allDay: selectedDateInfo.allDay,
-        extendedProps: {
-          shiftStatus: formData.shiftStatus,
-          recurring: formData.recurring,
-          position: formData.position,
-          employee: formData.employee || null,
-        },
-      };
-
-      calendarApi.addEvent(newEvent);
-      setCurrentEvents(prev => [...prev, newEvent]);
-    } catch (error) {
-      console.error("Error saving shift:", error);
-      alert("Failed to save shift to backend.");
-    }
-
-    setShowForm(false);
-  };
-
-
-  function calculateDuration(start, end) {
-    const startDate = new Date(start);
-    const endDate = new Date(end);
-    const diffMs = endDate - startDate;
-    const diffSeconds = Math.floor(diffMs / 1000);
-    const hours = Math.floor(diffSeconds / 3600);
-    const minutes = Math.floor((diffSeconds % 3600) / 60);
-    const seconds = diffSeconds % 60;
-    return `PT${hours}H${minutes}M${seconds}S`; 
-  }
-
 
   const handleEventClick = async (clickInfo) => {
     const shiftId = clickInfo.event.id;
@@ -152,25 +94,25 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
     try {
       const headers = { 'X-Company-ID': user.company };
       await axios.put(`http://localhost:8000/dash/${updatedData.id}/`, {
-        starttime: eventDetailData.starttime, 
-        duration: eventDetailData.duration,
+        // starttime: eventDetailData.starttime, 
+        // duration: eventDetailData.duration,
         status: updatedData.shiftStatus,
-        recurring: updatedData.recurring,
-        position: updatedData.position,
-        employee: updatedData.employee || null,
+        // recurring: updatedData.recurring,
+        // position: updatedData.position,
+        // employee: updatedData.employee || null,
       }, { headers });
 
       setCurrentEvents((prevEvents) => prevEvents.map(evt => {
         if (evt.id === updatedData.id) {
           return {
             ...evt,
-            title: updatedData.position,
+            // title: updatedData.position,
             extendedProps: {
               ...evt.extendedProps,
               shiftStatus: updatedData.shiftStatus,
-              recurring: updatedData.recurring,
-              position: updatedData.position,
-              employee: updatedData.employee || null,
+            //   recurring: updatedData.recurring,
+            //   position: updatedData.position,
+            //   employee: updatedData.employee || null,
             }
           };
         }
@@ -185,24 +127,10 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
     }
   };
 
-  const handleDeleteShift = async (idToDelete) => {
-    try {
-      const headers = { 'X-Company-ID': user.company };
-      await axios.delete(`http://localhost:8000/dash/${idToDelete}/`, { headers });
-
-      setCurrentEvents((prevEvents) => prevEvents.filter(evt => evt.id !== idToDelete));
-      alert('Shift deleted');
-      handleCloseDetail();
-    } catch (error) {
-      console.error('Failed to delete shift:', error);
-      alert('Failed to delete shift');
-    }
-  };
 
   return (
     <Box className="calendar-container">
       <Pagetitles title="Your Schedule" 
-    //   subtitle="Shift Scheduler" 
       />
       <Box className="calendar-layout">
 
@@ -244,7 +172,7 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
             selectable={true}
             selectMirror={true}
             dayMaxEvents={true}
-            select={handleDateClick}
+            // select={handleDateClick}
             eventClick={handleEventClick}
             events={currentEvents}
           />
@@ -266,7 +194,6 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
               eventData={eventDetailData}
               onClose={handleCloseDetail}
               onUpdate={handleUpdateShift}
-              onDelete={handleDeleteShift}
               user={user}
             />
           )}
