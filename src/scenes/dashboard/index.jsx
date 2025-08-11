@@ -16,8 +16,6 @@ const Dashboard = ({ user }) => {
   const [currentEvents, setCurrentEvents] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedDateInfo, setSelectedDateInfo] = useState(null);
-
-  // New state for event details modal
   const [eventDetailData, setEventDetailData] = useState(null);
   const [showEventDetail, setShowEventDetail] = useState(false);
 
@@ -41,13 +39,12 @@ const Dashboard = ({ user }) => {
         const headers = { 'X-Company-ID': user.company };
         const response = await axios.get("http://localhost:8000/dash/", { headers });
   
-        // Transform backend shifts into FullCalendar event objects
         const events = response.data.map(shift => ({
           id: shift.id,
           title: shift.position?.title || 'No Position',
           start: shift.starttime,
           end: new Date(new Date(shift.starttime).getTime() + parseDurationToMs(shift.duration)).toISOString(),
-          allDay: false, // or true if your shifts are all-day
+          allDay: false, 
           extendedProps: {
             shiftStatus: shift.status,
             recurring: shift.recurring,
@@ -66,8 +63,6 @@ const Dashboard = ({ user }) => {
   }, [user.company]);
   
   function parseDurationToMs(durationStr) {
-    // Example input: "PT1H30M0S" (1 hour 30 mins)
-    // Parse with regex:
     const match = durationStr.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
     if (!match) return 0;
   
@@ -79,7 +74,6 @@ const Dashboard = ({ user }) => {
   }
   
 
-  // Handle new event creation from date selection
   const handleDateClick = (selected) => {
     setSelectedDateInfo(selected);
     setShowForm(true);
@@ -87,7 +81,6 @@ const Dashboard = ({ user }) => {
     setShowEventDetail(false);
   };
 
-  // Create new shift event and save to backend
   const handleCreateEvent = async (formData) => {
     const calendarApi = selectedDateInfo.view.calendar;
     calendarApi.unselect();
@@ -130,21 +123,19 @@ const Dashboard = ({ user }) => {
     setShowForm(false);
   };
 
-  // Calculate ISO8601 duration string for backend
+
   function calculateDuration(start, end) {
     const startDate = new Date(start);
     const endDate = new Date(end);
     const diffMs = endDate - startDate;
-
     const diffSeconds = Math.floor(diffMs / 1000);
     const hours = Math.floor(diffSeconds / 3600);
     const minutes = Math.floor((diffSeconds % 3600) / 60);
     const seconds = diffSeconds % 60;
-
     return `PT${hours}H${minutes}M${seconds}S`; 
   }
 
-  // When clicking on existing event, fetch details and open detail modal
+
   const handleEventClick = async (clickInfo) => {
     const shiftId = clickInfo.event.id;
     try {
@@ -160,18 +151,16 @@ const Dashboard = ({ user }) => {
     }
   };
 
-  // Close detail modal
   const handleCloseDetail = () => {
     setShowEventDetail(false);
     setEventDetailData(null);
   };
 
-  // Update shift handler passed to modal and form
   const handleUpdateShift = async (updatedData) => {
     try {
       const headers = { 'X-Company-ID': user.company };
       await axios.put(`http://localhost:8000/dash/${updatedData.id}/`, {
-        starttime: eventDetailData.starttime, // keep existing starttime
+        starttime: eventDetailData.starttime, 
         duration: eventDetailData.duration,
         status: updatedData.shiftStatus,
         recurring: updatedData.recurring,
@@ -204,7 +193,6 @@ const Dashboard = ({ user }) => {
     }
   };
 
-  // Delete shift handler passed to modal
   const handleDeleteShift = async (idToDelete) => {
     try {
       const headers = { 'X-Company-ID': user.company };

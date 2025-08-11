@@ -76,7 +76,7 @@ function ShiftForm({ onClose, onCreate, onUpdate, onDelete, user, shift = null }
                   name="position"
                   onChange={(e) => {
                     setFieldValue('position', e.target.value);
-                    setFieldValue('employee', ''); // reset employee if position changes
+                    setFieldValue('employee', ''); 
                   }}
                 >
                   <option value="">Select position</option>
