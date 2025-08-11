@@ -30,18 +30,29 @@ const Form = ({ user }) => {
     fetchPositions();
   }, [user.company]);
 
+  useEffect(() => {
+    console.log("employeeForm user:", user);
+  }, [user]);
+
   const handleFormSubmit = async (values) => {
     console.log("Submitting position ID:", values.position);
     try {
+      const headers = { "X-Company-ID": user.company };
       const response = await axios.post("http://localhost:8000/team/employees/", {
-        name: values.firstName + values.lastName,
+        name: values.name,
         contact: values.email,
-        position: values.position,
+        position_id: values.position,
         company: user.company,
-      });
+      },
+      // { headers }
+    );
       console.log("Form submitted successfully:", response.data);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("Error updating employee:", error);
+      if (error.response) {
+        console.error("Backend validation errors:", error.response.data);
+      }
+      alert("Failed to create employee");
     }
   };
 
@@ -76,28 +87,14 @@ const Form = ({ user }) => {
                 fullWidth
                 variant="filled"
                 type="text"
-                label="First Name"
+                label="Name"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.firstName}
-                name="firstName"
-                error={!!touched.firstName && !!errors.firstName}
-                helperText={touched.firstName && errors.firstName}
-                sx={{ gridColumn: "span 2" }}
-              />
-
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="Last Name"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.lastName}
-                name="lastName"
-                error={!!touched.lastName && !!errors.lastName}
-                helperText={touched.lastName && errors.lastName}
-                sx={{ gridColumn: "span 2" }}
+                value={values.name}
+                name="name"
+                error={!!touched.name && !!errors.name}
+                helperText={touched.name && errors.name}
+                sx={{ gridColumn: "span 4" }}
               />
 
               <TextField
@@ -172,15 +169,13 @@ const Form = ({ user }) => {
 };
 
 const checkoutSchema = yup.object().shape({
-  firstName: yup.string().required("Required"),
-  lastName: yup.string().required("Required"),
+  name: yup.string().required("Required"),
   email: yup.string().email("Invalid email"),
   position: yup.string().required("Required"),
 });
 
 const initialValues = {
-  firstName: "",
-  lastName: "",
+  name: "",
   email: "",
   position: "",
 };

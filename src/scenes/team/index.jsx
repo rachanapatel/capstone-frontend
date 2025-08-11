@@ -1,197 +1,3 @@
-// import { Box, Typography, useTheme } from "@mui/material";
-// import { DataGrid } from "@mui/x-data-grid";
-// import { colors } from "../../theme";
-// import { Link } from 'react-router-dom';
-// import Pagetitles from "../../Pagetitles";
-// import { useState, useEffect } from "react";
-// import axios from "axios";
-// import EmployeeDetail from './EmployeeDetail';
-// import PositionDetail from './PositionDetail';
-
-// const Team = ({ user }) => {
-//   const theme = useTheme();
-//   const [teamData, setTeamData] = useState([]);
-//   const [selectedEmployee, setSelectedEmployee] = useState(null);
-//   const [selectedPosition, setSelectedPosition] = useState(null);
-//   const [showEmployeeModal, setShowEmployeeModal] = useState(false);
-//   const [showPositionModal, setShowPositionModal] = useState(false);
-
-//   useEffect(() => {
-//     async function fetchTeamData() {
-//       try {
-//         const response = await axios.get("http://localhost:8000/team/");
-//         setTeamData(response.data);
-//       } catch (error) {
-//         console.error("Error fetching data:", error);
-//       }
-//     }
-//     fetchTeamData();
-//   }, []);
-
-
-//   const handleEmployeeRowClick = (params) => {
-//     console.log('Row click params:', params);
-//     if (!params || !params.row) {
-//       console.error('params or params.row is missing!');
-//       return;
-//     }    
-//     setSelectedEmployee(params.row);
-//     setShowEmployeeModal(true);
-//   };
-
-//   const handlePositionClick = (position) => {
-//     setSelectedPosition(position);
-//     setShowPositionModal(true);
-//   };
-
-//   // Callbacks for Employee Modal updates/deletes
-//   const handleEmployeeUpdate = (updatedEmployee) => {
-//     setTeamData((prev) =>
-//       prev.map((emp) => (emp.id === updatedEmployee.id ? updatedEmployee : emp))
-//     );
-//     setShowEmployeeModal(false);
-//     setSelectedEmployee(null);
-//   };
-
-//   const handleEmployeeDelete = (deletedEmployeeId) => {
-//     setTeamData((prev) => prev.filter((emp) => emp.id !== deletedEmployeeId));
-//     setShowEmployeeModal(false);
-//     setSelectedEmployee(null);
-//   };
-
-//   // Callbacks for Position Modal updates/deletes
-//   const handlePositionUpdate = (updatedPosition) => {
-//     // Update position title in all affected employees
-//     setTeamData((prev) =>
-//       prev.map((emp) =>
-//         emp.position.id === updatedPosition.id
-//           ? { ...emp, position: updatedPosition }
-//           : emp
-//       )
-//     );
-//     setShowPositionModal(false);
-//     setSelectedPosition(null);
-//   };
-
-//   const handlePositionDelete = (deletedPositionId) => {
-//     // Remove position from employees or handle as needed
-//     setTeamData((prev) =>
-//       prev.filter((emp) => emp.position.id !== deletedPositionId)
-//     );
-//     setShowPositionModal(false);
-//     setSelectedPosition(null);
-//   };
-
-
-//   const columns = [
-//     {
-//       field: "name",
-//       headerName: "Team Member",
-//       flex: 1,
-//       cellClassName: "name-column--cell",
-//     },
-//     {
-//       field: "contact",
-//       headerName: "Contact Information",
-//       flex: 1,
-//     },
-//     {
-//       field: "position",
-//       headerName: "Position",
-//       flex: 1,
-//       // valueGetter: (params) => params.row.position?.title || '',
-//       renderCell: (params) => {
-//         return params.row?.position?.title || "";
-//       },
-//     },
-//   ];
-  
-
-//   return (
-//     <Box m="20px">
-//       <Pagetitles title="TEAM" subtitle="Roster" />
-
-//       <Box mb={2}>
-//         <Link to="/form">Add Employee</Link> | <Link to="/position">Add Position</Link>
-//       </Box>
-
-//       <Box
-//         height="75vh"
-//         sx={{
-//           "& .MuiDataGrid-root": {
-//             border: "none",
-//           },
-//           "& .MuiDataGrid-cell": {
-//             borderBottom: "none",
-//           },
-//           "& .name-column--cell": {
-//             color: colors.greenAccent[300],
-//           },
-//           "& .MuiDataGrid-columnHeaders": {
-//             backgroundColor: colors.blueAccent[700],
-//             borderBottom: "none",
-//           },
-//           "& .MuiDataGrid-virtualScroller": {
-//             backgroundColor: colors.primary[400],
-//           },
-//           "& .MuiDataGrid-footerContainer": {
-//             borderTop: "none",
-//             backgroundColor: colors.blueAccent[700],
-//           },
-//           "& .MuiCheckbox-root": {
-//             color: `${colors.greenAccent[200]} !important`,
-//           },
-//           "button": {
-//             fontFamily: 'inherit',
-//           }
-//         }}
-//       >
-
-//       <Box onClick={() => console.log('Box clicked')}>
-//         <DataGrid
-//           rows={teamData}
-//           columns={columns}
-//           getRowId={(row) => row.id}
-//           onRowClick={handleEmployeeRowClick}
-//         />
-//       </Box>
-
-//       </Box>
-
-//       {showEmployeeModal && selectedEmployee && (
-//         <EmployeeDetail
-//           open={showEmployeeModal}
-//           employeeData={selectedEmployee}
-//           onClose={() => {
-//             setShowEmployeeModal(false);
-//             setSelectedEmployee(null);
-//           }}
-//           onUpdate={handleEmployeeUpdate}
-//           onDelete={handleEmployeeDelete}
-//           user={user}
-//         />
-//       )}
-
-//       {showPositionModal && selectedPosition && (
-//         <PositionDetail
-//           open={showPositionModal}
-//           positionData={selectedPosition}
-//           onClose={() => {
-//             setShowPositionModal(false);
-//             setSelectedPosition(null);
-//           }}
-//           onUpdate={handlePositionUpdate}
-//           onDelete={handlePositionDelete}
-//           user={user}
-//         />
-//       )}
-//     </Box>
-//   );
-// };
-
-// export default Team;
-
-
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { colors } from "../../theme";
@@ -201,6 +7,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import EmployeeDetail from "./EmployeeDetail";
 import PositionDetail from "./PositionDetail";
+import PositionForm from "../PositionForm";
+import { Dialog, DialogTitle, DialogContent, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import Form from '../form/index';
 
 const Team = ({ user }) => {
   const theme = useTheme();
@@ -209,6 +19,12 @@ const Team = ({ user }) => {
   const [selectedPosition, setSelectedPosition] = useState(null);
   const [showEmployeeModal, setShowEmployeeModal] = useState(false);
   const [showPositionModal, setShowPositionModal] = useState(false);
+  const [showPositionFormModal, setShowPositionFormModal] = useState(false);
+  const handleOpenPositionForm = () => setShowPositionFormModal(true);
+  const handleClosePositionForm = () => setShowPositionFormModal(false);  
+  const [showNewEmployeeForm, setShowNewEmployeeForm] = useState(false);
+  const handleOpenNewEmployeeForm = () => setShowNewEmployeeForm(true);
+  const handleCloseNewEmployeeForm = () => setShowNewEmployeeForm(false); 
 
   useEffect(() => {
     async function fetchTeamData() {
@@ -222,9 +38,9 @@ const Team = ({ user }) => {
     fetchTeamData();
   }, []);
 
-  // Open employee modal on clicking name or contact cells
+
   const handleCellClick = (params, event) => {
-    event.stopPropagation(); // prevent row click
+    event.stopPropagation(); 
     if (params.field === "name" || params.field === "contact") {
       setSelectedEmployee(params.row);
       setShowEmployeeModal(true);
@@ -234,7 +50,6 @@ const Team = ({ user }) => {
     }
   };
 
-  // Callbacks for Employee Modal updates/deletes
   const handleEmployeeUpdate = (updatedEmployee) => {
     setTeamData((prev) =>
       prev.map((emp) => (emp.id === updatedEmployee.id ? updatedEmployee : emp))
@@ -249,7 +64,6 @@ const Team = ({ user }) => {
     setSelectedEmployee(null);
   };
 
-  // Callbacks for Position Modal updates/deletes
   const handlePositionUpdate = (updatedPosition) => {
     setTeamData((prev) =>
       prev.map((emp) =>
@@ -263,7 +77,6 @@ const Team = ({ user }) => {
   };
 
   const handlePositionDelete = (deletedPositionId) => {
-    // Here you might want to handle employees with deleted positions differently
     setTeamData((prev) =>
       prev.filter((emp) => emp.position.id !== deletedPositionId)
     );
@@ -296,12 +109,65 @@ const Team = ({ user }) => {
   ];
 
   return (
+
     <Box m="20px">
       <Pagetitles title="TEAM" subtitle="Roster" />
 
       <Box mb={2}>
         <Link to="/form">Add Employee</Link> | <Link to="/position">Add Position</Link>
       </Box>
+
+      <>
+      <button onClick={handleOpenPositionForm}>Add Position</button>
+
+      <Dialog
+        open={showPositionFormModal}
+        onClose={handleClosePositionForm}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          Create New Position
+          <IconButton
+            aria-label="close"
+            onClick={handleClosePositionForm}
+            sx={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+
+        <DialogContent>
+          <PositionForm user={user} />
+        </DialogContent>
+      </Dialog>
+    </>
+
+    <>
+      <button onClick={handleOpenNewEmployeeForm}>Add Employee</button>
+
+      <Dialog
+        open={showNewEmployeeForm}
+        onClose={handleCloseNewEmployeeForm}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          Create New Employee
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseNewEmployeeForm}
+            sx={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+
+        <DialogContent>
+          <PositionForm user={user} />
+        </DialogContent>
+      </Dialog>
+    </>
 
       <Box
         height="75vh"
