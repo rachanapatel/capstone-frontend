@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-// const kBaseURL='http://localhost:8000';
-const kBaseURL = 'https://ets-trial-backend.onrender.com';
+const kBaseURL='http://localhost:8000';
+// const kBaseURL = 'https://ets-trial-backend.onrender.com';
 
 const CompanyRegistration = () => {
   const [companyName, setCompanyName] = useState('');

@@ -1,7 +1,7 @@
 // import { useState } from 'react'
 // import { Routes, Route } from "react-router-dom";
-import Form from './scenes/form';
-import PositionForm from './scenes/PositionForm';
+import Form from './scenes/form'; // STAND ALONE NEW EMP FORM
+import PositionForm from './scenes/PositionForm'; // STAND ALONE NEW POS FORM
 
 import './App.css'
 import Header from './scenes/global/Header';
@@ -73,10 +73,10 @@ function App() {
               <Route path="/team" element={
                 <RequireAuth><Team user={user} /></RequireAuth>
               } />
-              <Route path="/form" element={user?.is_manager ? (
-                <RequireAuth><Team user={user} /></RequireAuth>) : (<NoAccess />)} /> 
-              <Route path="/position" element={user?.is_manager ? (
-                <RequireAuth><Team user={user} /></RequireAuth>) : (<NoAccess />)} />                            
+              <Route path="/team/employees/new" element={user?.is_manager ? (
+                <RequireAuth><Form user={user} /></RequireAuth>) : (<NoAccess />)} /> 
+              <Route path="/team/positions/new" element={user?.is_manager ? (
+                <RequireAuth><PositionForm user={user} /></RequireAuth>) : (<NoAccess />)} />                            
               <Route path="/calendar" element={<ComingSoon />} />
               <Route path="*" element={<Navigate to="/dash" />} />
             </Routes>

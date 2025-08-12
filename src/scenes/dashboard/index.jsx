@@ -12,8 +12,8 @@ import ShiftForm from './ShiftForm';
 import EventDetail from './EventDetail'
 import './index.css';
 
-// const kBaseURL='http://localhost:8000';
-const kBaseURL = 'https://ets-trial-backend.onrender.com';
+const kBaseURL='http://localhost:8000';
+// const kBaseURL = 'https://ets-trial-backend.onrender.com';
 
 const Dashboard = ({ user }) => {
   const [currentEvents, setCurrentEvents] = useState([]);

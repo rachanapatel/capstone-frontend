@@ -3,8 +3,8 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, M
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 
-// const kBaseURL='http://localhost:8000';
-const kBaseURL = 'https://ets-trial-backend.onrender.com';
+const kBaseURL='http://localhost:8000';
+// const kBaseURL = 'https://ets-trial-backend.onrender.com';
 
 function EmployeeDetail({ open, employeeData, onClose, onUpdate, onDelete, user }) {
   const [editMode, setEditMode] = useState(false);

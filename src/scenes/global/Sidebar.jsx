@@ -89,8 +89,8 @@ const Sidebar = ({ user }) => {
             <Item title="Manage Team" to="/team" icon={<PeopleOutlinedIcon />} selected={selected} setSelected={setSelected} />
             {user.is_manager && (
               <>
-              <Item title="New Member" to="/form" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />
-              <Item title="New Position" to="/position" icon={<PersonOutlinedIcon />} selected={selected} setSelected={setSelected} />
+              <Item title="New Member" to="/team/employees/new" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />
+              <Item title="New Position" to="/team/positions/new" icon={<PersonOutlinedIcon />} selected={selected} setSelected={setSelected} />
               </>
             )}
 
