@@ -3,7 +3,9 @@
     /* --header-title-color: #e0e0e0; 
     --header-subtitle-color: #3da58a;  */
     
-    --header-title-color: #3da58a; /* Default grey[100] color from the theme */
+    /* --header-title-color: #3da58a;  */
+    /* Default grey[100] color from the theme */
+    --header-title-color: #2c47ce; /* Default grey[100] color from the theme */
     --header-subtitle-color: #858585; /* Default greenAccent[400] color from the theme */    
   }
   

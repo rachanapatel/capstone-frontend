@@ -18,7 +18,8 @@
   
   .calendar-event-item {
     /* background-color: var(--green-accent); */
-    background-color: #4cceac;
+    /* background-color: #4cceac; */
+    background-color:#2c47ce;
     margin: 10px 0;
     border-radius: 2px;
   }

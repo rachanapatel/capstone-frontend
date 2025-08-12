@@ -2,8 +2,8 @@
 // import { useNavigate } from 'react-router-dom';
 // import axios from 'axios';
 
-// // const kBaseURL='http://localhost:8000';
-const kBaseURL = 'https://ets-trial-backend.onrender.com';
+const kBaseURL='http://localhost:8000';
+// const kBaseURL = 'https://ets-trial-backend.onrender.com';
 
 // const Login = ({ setUser }) => {
 //   const [username, setUsername] = useState('');
@@ -146,7 +146,7 @@ const SignInSide = ({ setUser }) => {
   return (
     <Grid container component="main" sx={{ height: "100vh", fontFamily: 'sans-serif', textAlign: 'center' }}>
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} sx={{ backgroundImage: "url(https://t3.ftcdn.net/jpg/00/86/56/12/360_F_86561234_8HJdzg2iBlPap18K38mbyetKfdw1oNrm.jpg)", backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center" }} />
+      <Grid item xs={false} sm={4} md={7} sx={{ backgroundImage: "url(https://coolbackgrounds.imgix.net/2ZNzi2Wk9hFtClSONLBumr/57c308a9090ef211ef017737933c755b/blue-gradient-background.png?w=3840&q=60&auto=format,compress)", backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center" }} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <Box sx={{ margin: 8, display: "flex", flexDirection: "column", alignItems: "center" }}>
           <Avatar sx={{ margin: 1, backgroundColor: "secondary.main" }}>

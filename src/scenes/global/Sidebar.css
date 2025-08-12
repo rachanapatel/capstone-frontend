@@ -11,11 +11,14 @@
   }
   
   .sidebar .pro-inner-item:hover {
-    color: #868dfb !important;
+    /* color: #868dfb !important; */
+    color: #3472b0 !important;
+    
   }
   
   .sidebar .pro-menu-item.active {
-    color: #6870fa !important;
+    /* color: #6870fa !important; */
+    color: #1569bd !important;
   }
   
   .menu-toggle {
