@@ -12,7 +12,7 @@ Currently, two official plugins are available:
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
 
 
-# Shift Scheduler Dashboard
+# Employee Time Scheduler
 
 This is an application that allows users to view and manage work shifts. The application supports two user roles: managers and non-managers, each with different levels of access and functionality. Manager users can create an account, create, update and delete positions and employees, and view all shifts within the company, create new shifts, update all shift details, and delete shifts. Meanwhile, other users can view only their own assigned shifts, view shift details, and update the status of their assigned shifts.
 
