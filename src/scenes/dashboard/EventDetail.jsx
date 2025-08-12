@@ -1,9 +1,44 @@
 import React, { useState } from 'react';
 import {Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Box,} from '@mui/material';
 import ShiftForm from './ShiftForm';
+import { useEffect } from 'react';
+import axios from 'axios';
+
+const kBaseURL = 'http://localhost:8000';
 
 function EventDetailModal({ open, eventData, onClose, onUpdate, onDelete, user }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [fullPosition, setFullPosition] = useState(null);
+  const [fullEmployee, setFullEmployee] = useState(null);
+  useEffect(() => {
+    const headers = { 'X-Company-ID': user.company };
+  
+    const fetchDetails = async () => {
+      try {
+        if (eventData?.position && typeof eventData.position === 'number') {
+          const res = await axios.get(`${kBaseURL}/team/positions/${eventData.position}/`, { headers });
+          setFullPosition(res.data);
+        } else {
+          setFullPosition(eventData?.position || null);
+        }
+  
+        if (eventData?.employee && typeof eventData.employee === 'number') {
+          const res = await axios.get(`${kBaseURL}/team/employees/${eventData.employee}/`, { headers });
+          setFullEmployee(res.data);
+        } else {
+          setFullEmployee(eventData?.employee || null);
+        }
+      } catch (error) {
+        console.error('Error fetching position/employee:', error);
+      }
+    };
+  
+    if (open && eventData) {
+      fetchDetails();
+    }
+  }, [eventData, open, user.company]);
+  
+  
 
   if (!eventData) return null;
 
@@ -47,12 +82,19 @@ function EventDetailModal({ open, eventData, onClose, onUpdate, onDelete, user }
             user={user} 
           />
         ) : (
+          // <Box>
+          //   <Typography><strong>Position:</strong> {eventData.position?.title || 'N/A'}</Typography>
+          //   <Typography><strong>Employee:</strong> {eventData.employee?.name || 'Unassigned'}</Typography>
+          //   <Typography><strong>Status:</strong> {eventData.status || 'N/A'}</Typography>
+          //   <Typography><strong>Recurring:</strong> {eventData.recurring ? 'Yes' : 'No'}</Typography>
+          // </Box>
           <Box>
-            <Typography><strong>Position:</strong> {eventData.position?.title || 'N/A'}</Typography>
-            <Typography><strong>Employee:</strong> {eventData.employee?.name || 'Unassigned'}</Typography>
-            <Typography><strong>Status:</strong> {eventData.status || 'N/A'}</Typography>
-            <Typography><strong>Recurring:</strong> {eventData.recurring ? 'Yes' : 'No'}</Typography>
-          </Box>
+          <Typography><strong>Position:</strong> {fullPosition?.title || 'N/A'}</Typography>
+          <Typography><strong>Employee:</strong> {fullEmployee?.name || 'Unassigned'}</Typography>
+          <Typography><strong>Status:</strong> {eventData.status || 'N/A'}</Typography>
+          <Typography><strong>Recurring:</strong> {eventData.recurring ? 'Yes' : 'No'}</Typography>
+        </Box>
+        
         )}
       </DialogContent>
       {!isEditing && (

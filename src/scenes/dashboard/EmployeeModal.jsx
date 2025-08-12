@@ -29,7 +29,7 @@ export default function EmployeeModal({ employeeId, open, onClose }) {
 
     setLoading(true);
     const fetchEmployee = axios.get(`${kBaseURL}/team/employees/${employeeId}`);
-    const fetchPositions = axios.get(`${kBaseURL}/team/positions`);
+    const fetchPositions = axios.get(`${kBaseURL}/team/positions/`);
 
     Promise.all([fetchEmployee, fetchPositions])
       .then(([empRes, posRes]) => {

@@ -95,7 +95,7 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
   
           // If position is just an ID, fetch the full position object
           if (position && typeof position === 'number') {
-            const positionRes = await axios.get(`${kBaseURL}/team/positions/${position}`, { headers });
+            const positionRes = await axios.get(`${kBaseURL}/team/positions/${position}/`, { headers });
             position = positionRes.data;
           }
   
@@ -277,20 +277,20 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
 
         {/* CALENDAR SIDEBAR */}
         <Box className="calendar-sidebar">
-          <Typography variant="h5">Events</Typography>
+          <Typography variant="h5">Shifts</Typography>
           <List>
             {currentEvents.map((event) => (
               <ListItem key={event.id} className="calendar-event">
                 <ListItemText
                   primary={event.title}
-                  secondary={
-                    <Typography>
-                      {formatDate(event.start, {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </Typography>
+                  secondary={"word"
+                    // <Typography>
+                    //   {formatDate(event.start, {
+                    //     year: "numeric",
+                    //     month: "short",
+                    //     day: "numeric",
+                    //   })}
+                    // </Typography>
                   }
                 />
               </ListItem>

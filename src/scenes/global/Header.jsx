@@ -4,6 +4,10 @@ import { Box, IconButton, InputBase,} from "@mui/material";
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import LogoutIcon from "@mui/icons-material/Logout";
+import CircleNotificationsOutlinedIcon from '@mui/icons-material/CircleNotificationsOutlined';
+import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+
 import { useNavigate } from "react-router-dom";
 // import { useContext } from "react";
 // import { useTheme } from "@mui/material/styles"
@@ -30,10 +34,13 @@ const Header = ({ setUser }) => {
 
       <Box className="icon-group">
         <IconButton> <CircleNotificationsIcon /> </IconButton>
+        <IconButton> <CircleNotificationsOutlinedIcon /> </IconButton>
         <IconButton> <ManageAccountsIcon /> </IconButton>
+        <IconButton> <ManageAccountsOutlinedIcon /></IconButton>
         <IconButton onClick={handleLogout} title="Log out">
           <LogoutIcon />
         </IconButton>
+        <IconButton> <LogoutOutlinedIcon /></IconButton>
       </Box>
     </Box>
   );
