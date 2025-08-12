@@ -345,6 +345,157 @@
 
 // export default Team;
 
+// import { Box, Typography, useTheme, IconButton, Menu, MenuItem } from "@mui/material";
+// import { DataGrid } from "@mui/x-data-grid";
+// import { colors } from "../../theme";
+// import { Link } from 'react-router-dom';
+// import Pagetitles from "../../Pagetitles";
+// import { useState, useEffect } from "react";
+// import axios from "axios";
+// import MoreVertIcon from '@mui/icons-material/MoreVert';
+// import EmployeeDetail from './EmployeeDetail'; // Import your modal component
+// import PositionDetail from './PositionDetail'; // Import the modal for Position editing
+
+// const Team = ( {user} ) => {
+//   const theme = useTheme();
+//   const [teamData, setTeamData] = useState([]);
+//   const [anchorEl, setAnchorEl] = useState(null); // For the menu
+//   const [selectedEmployee, setSelectedEmployee] = useState(null);
+//   const [selectedPosition, setSelectedPosition] = useState(null);
+//   const [showEmployeeModal, setShowEmployeeModal] = useState(false);
+//   const [showPositionModal, setShowPositionModal] = useState(false);
+
+//   const handleOpenMenu = (event, employee) => {
+//     setAnchorEl(event.currentTarget);
+//     setSelectedEmployee(employee); // Set employee when menu opens
+//   };
+
+//   const handleCloseMenu = () => {
+//     setAnchorEl(null);
+//     setSelectedEmployee(null);
+//   };
+
+//   const handleViewEmployee = () => {
+//     setShowEmployeeModal(true);
+//     handleCloseMenu();
+//   };
+
+//   const handleEditEmployee = () => {
+//     setShowEmployeeModal(true); // Implement employee edit modal here
+//     handleCloseMenu();
+//   };
+
+//   const handleEditPosition = () => {
+//     setShowPositionModal(true);
+//     handleCloseMenu();
+//   };
+
+//   useEffect(() => {
+//     async function fetchTeamData() {
+//       try {
+//         const response = await axios.get("http://localhost:8000/team/");
+//         setTeamData(response.data);
+//       } catch (error) {
+//         console.error("Error fetching data:", error);
+//       }
+//     }
+//     fetchTeamData();
+//   }, []);
+
+//   const columns = [
+//     {
+//       field: "name",
+//       headerName: "Team Member",
+//       flex: 1,
+//     },
+//     {
+//       field: "email",
+//       headerName: "Contact Information",
+//       flex: 1,
+//     },
+//     {
+//       field: "position",
+//       headerName: "Position",
+//       type: "text",
+//       headerAlign: "left",
+//       align: "left",
+//     },
+//     {
+//       field: "options",
+//       headerName: "Options",
+//       renderCell: (params) => {
+//         return (
+//           <IconButton
+//             onClick={(event) => handleOpenMenu(event, params.row)}
+//           >
+//             <MoreVertIcon />
+//           </IconButton>
+//         );
+//       },
+//     },
+//   ];
+
+//   return (
+//     <Box m="20px">
+//       <Pagetitles title="TEAM" subtitle="Roster" />
+//       <Box
+//         m="40px 0 0 0"
+//         height="75vh"
+//         sx={{
+//           "& .MuiDataGrid-root": {
+//             border: "none",
+//           },
+//           "& .MuiDataGrid-cell": {
+//             borderBottom: "none",
+//           },
+//           "& .MuiDataGrid-columnHeaders": {
+//             backgroundColor: colors.blueAccent[700],
+//             borderBottom: "none",
+//           },
+//         }}
+//       >
+//         <div>
+//           <Link to="/team/employees/new">Add Employee</Link> | 
+//           <Link to="/team/positions/new">Add Position</Link>
+//         </div>
+
+//         <DataGrid rows={teamData} columns={columns} />
+
+//         {/* Menu for options */}
+//         <Menu
+//           anchorEl={anchorEl}
+//           open={Boolean(anchorEl)}
+//           onClose={handleCloseMenu}
+//         >
+//           <MenuItem onClick={handleViewEmployee}>View Employee</MenuItem>
+//           <MenuItem onClick={handleEditEmployee}>Edit Employee</MenuItem>
+//           <MenuItem onClick={handleEditPosition}>Edit Position</MenuItem>
+//         </Menu>
+
+//         {/* Modals for viewing and editing */}
+//         {showEmployeeModal && selectedEmployee && (
+//           <EmployeeDetail
+//             open={showEmployeeModal}
+//             employeeData={selectedEmployee}
+//             onClose={() => setShowEmployeeModal(false)}
+//           />
+//         )}
+
+//         {showPositionModal && selectedPosition && (
+//           <PositionDetail
+//             open={showPositionModal}
+//             positionData={selectedPosition}
+//             onClose={() => setShowPositionModal(false)}
+//           />
+//         )}
+//       </Box>
+//     </Box>
+//   );
+// };
+
+// export default Team;
+
+
 import { Box, Typography, useTheme, IconButton, Menu, MenuItem } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { colors } from "../../theme";
@@ -353,60 +504,108 @@ import Pagetitles from "../../Pagetitles";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import EmployeeDetail from './EmployeeDetail'; // Import your modal component
-import PositionDetail from './PositionDetail'; // Import the modal for Position editing
 
-const Team = ( {user} ) => {
+import EmployeeDetail from "./EmployeeDetail"; // adjust path as needed
+import PositionDetail from "./PositionDetail"; // adjust path as needed
+
+const Team = ({ user }) => {
   const theme = useTheme();
   const [teamData, setTeamData] = useState([]);
-  const [anchorEl, setAnchorEl] = useState(null); // For the menu
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [selectedPosition, setSelectedPosition] = useState(null);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [menuRowId, setMenuRowId] = useState(null);
+
   const [showEmployeeModal, setShowEmployeeModal] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+
   const [showPositionModal, setShowPositionModal] = useState(false);
-
-  const handleOpenMenu = (event, employee) => {
-    setAnchorEl(event.currentTarget);
-    setSelectedEmployee(employee); // Set employee when menu opens
-  };
-
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-    setSelectedEmployee(null);
-  };
-
-  const handleViewEmployee = () => {
-    setShowEmployeeModal(true);
-    handleCloseMenu();
-  };
-
-  const handleEditEmployee = () => {
-    setShowEmployeeModal(true); // Implement employee edit modal here
-    handleCloseMenu();
-  };
-
-  const handleEditPosition = () => {
-    setShowPositionModal(true);
-    handleCloseMenu();
-  };
+  const [selectedPosition, setSelectedPosition] = useState(null);
 
   useEffect(() => {
     async function fetchTeamData() {
       try {
-        const response = await axios.get("http://localhost:8000/team/");
+        const headers = { "X-Company-ID": user.company };
+        const response = await axios.get("http://localhost:8000/team/", { headers });
         setTeamData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
     fetchTeamData();
-  }, []);
+  }, [user.company]);
+
+  const handleMenuOpen = (event, rowId) => {
+    setAnchorEl(event.currentTarget);
+    setMenuRowId(rowId);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setMenuRowId(null);
+  };
+
+  const handleViewEditEmployee = () => {
+    const employee = teamData.find((row) => row.id === menuRowId);
+    if (employee) {
+      setSelectedEmployee(employee);
+      setShowEmployeeModal(true);
+    }
+    handleMenuClose();
+  };
+
+  const handleViewEditPosition = () => {
+    const employee = teamData.find((row) => row.id === menuRowId);
+    if (employee && employee.position) {
+      setSelectedPosition(employee.position);
+      setShowPositionModal(true);
+    }
+    handleMenuClose();
+  };
+
+  const handleEmployeeUpdate = (updatedEmployee) => {
+    setTeamData((prev) =>
+      prev.map((emp) => (emp.id === updatedEmployee.id ? updatedEmployee : emp))
+    );
+    setShowEmployeeModal(false);
+    setSelectedEmployee(null);
+  };
+
+  const handleEmployeeDelete = (deletedEmployeeId) => {
+    setTeamData((prev) => prev.filter((emp) => emp.id !== deletedEmployeeId));
+    setShowEmployeeModal(false);
+    setSelectedEmployee(null);
+  };
+
+  const handlePositionUpdate = (updatedPosition) => {
+    setTeamData((prev) =>
+      prev.map((emp) =>
+        emp.position?.id === updatedPosition.id
+          ? { ...emp, position: updatedPosition }
+          : emp
+      )
+    );
+    setShowPositionModal(false);
+    setSelectedPosition(null);
+  };
+
+  const handlePositionDelete = (deletedPositionId) => {
+    setTeamData((prev) =>
+      prev.map((emp) =>
+        emp.position?.id === deletedPositionId
+          ? { ...emp, position: null }
+          : emp
+      )
+    );
+    setShowPositionModal(false);
+    setSelectedPosition(null);
+  };
 
   const columns = [
     {
       field: "name",
       headerName: "Team Member",
       flex: 1,
+      cellClassName: "name-column--cell",
     },
     {
       field: "email",
@@ -416,22 +615,35 @@ const Team = ( {user} ) => {
     {
       field: "position",
       headerName: "Position",
-      type: "text",
-      headerAlign: "left",
-      align: "left",
+      flex: 1,
+      valueGetter: (params) => params.row.position?.title || "",
     },
     {
       field: "options",
       headerName: "Options",
-      renderCell: (params) => {
-        return (
+      width: 80,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => (
+        <>
           <IconButton
-            onClick={(event) => handleOpenMenu(event, params.row)}
+            onClick={(event) => handleMenuOpen(event, params.row.id)}
+            size="small"
           >
             <MoreVertIcon />
           </IconButton>
-        );
-      },
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl) && menuRowId === params.row.id}
+            onClose={handleMenuClose}
+          >
+            <MenuItem onClick={handleViewEditEmployee}>View/Edit Employee</MenuItem>
+            <MenuItem onClick={handleViewEditPosition} disabled={!params.row.position}>
+              View/Edit Position
+            </MenuItem>
+          </Menu>
+        </>
+      ),
     },
   ];
 
@@ -448,47 +660,65 @@ const Team = ( {user} ) => {
           "& .MuiDataGrid-cell": {
             borderBottom: "none",
           },
+          "& .name-column--cell": {
+            color: colors.greenAccent[300],
+          },
           "& .MuiDataGrid-columnHeaders": {
             backgroundColor: colors.blueAccent[700],
             borderBottom: "none",
           },
+          "& .MuiDataGrid-virtualScroller": {
+            backgroundColor: colors.primary[400],
+          },
+          "& .MuiDataGrid-footerContainer": {
+            borderTop: "none",
+            backgroundColor: colors.blueAccent[700],
+          },
+          "& .MuiCheckbox-root": {
+            color: `${colors.greenAccent[200]} !important`,
+          },
         }}
       >
         <div>
-          <Link to="/team/employees/new">Add Employee</Link> | 
+          <Link to="/team/employees/new">Add Employee</Link> |{" "}
           <Link to="/team/positions/new">Add Position</Link>
         </div>
 
-        <DataGrid rows={teamData} columns={columns} />
-
-        {/* Menu for options */}
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleCloseMenu}
-        >
-          <MenuItem onClick={handleViewEmployee}>View Employee</MenuItem>
-          <MenuItem onClick={handleEditEmployee}>Edit Employee</MenuItem>
-          <MenuItem onClick={handleEditPosition}>Edit Position</MenuItem>
-        </Menu>
-
-        {/* Modals for viewing and editing */}
-        {showEmployeeModal && selectedEmployee && (
-          <EmployeeDetail
-            open={showEmployeeModal}
-            employeeData={selectedEmployee}
-            onClose={() => setShowEmployeeModal(false)}
-          />
-        )}
-
-        {showPositionModal && selectedPosition && (
-          <PositionDetail
-            open={showPositionModal}
-            positionData={selectedPosition}
-            onClose={() => setShowPositionModal(false)}
-          />
-        )}
+        <DataGrid
+          rows={teamData}
+          columns={columns}
+          getRowId={(row) => row.id}
+          disableSelectionOnClick
+        />
       </Box>
+
+      {showEmployeeModal && selectedEmployee && (
+        <EmployeeDetail
+          open={showEmployeeModal}
+          employeeData={selectedEmployee}
+          onClose={() => {
+            setShowEmployeeModal(false);
+            setSelectedEmployee(null);
+          }}
+          onUpdate={handleEmployeeUpdate}
+          onDelete={handleEmployeeDelete}
+          user={user}
+        />
+      )}
+
+      {showPositionModal && selectedPosition && (
+        <PositionDetail
+          open={showPositionModal}
+          positionData={selectedPosition}
+          onClose={() => {
+            setShowPositionModal(false);
+            setSelectedPosition(null);
+          }}
+          onUpdate={handlePositionUpdate}
+          onDelete={handlePositionDelete}
+          user={user}
+        />
+      )}
     </Box>
   );
 };
