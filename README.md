@@ -14,7 +14,7 @@ If you are developing a production application, we recommend using TypeScript wi
 
 # Shift Scheduler Dashboard
 
-This is an application that allows users to view and manage work shifts. The application supports two user roles: managers and non-managers, each with different levels of access and functionality. Manager users can create an account, create, update and delete positions anad employees, and view all shifts within the company, create new shifts, update all shift details, and delete shifts. Meanwhile, other users can view only their own assigned shifts, view shift details, and update the status of their assigned shifts.
+This is an application that allows users to view and manage work shifts. The application supports two user roles: managers and non-managers, each with different levels of access and functionality. Manager users can create an account, create, update and delete positions and employees, and view all shifts within the company, create new shifts, update all shift details, and delete shifts. Meanwhile, other users can view only their own assigned shifts, view shift details, and update the status of their assigned shifts.
 
 
 
@@ -31,7 +31,7 @@ This is an application that allows users to view and manage work shifts. The app
 - Material UI:
   - `@mui/material`
   - `@mui/icons-material`
-- `date-fns` (for formatting dates)
+
 
 ## Setup Instructions
 
@@ -41,7 +41,11 @@ This is an application that allows users to view and manage work shifts. The app
    git clone <repository-url>
    cd <project-directory>
 
-   cd <project-directory>
 2. **Install dependencies**
-npm install
+
+    ```bash
+    npm install
+
 3. **Start the development server**
+    ```bash
+    npm start
