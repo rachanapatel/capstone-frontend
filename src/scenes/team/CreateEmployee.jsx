@@ -4,7 +4,7 @@ import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Pagetitles from "../../Pagetitles";
 import { useState, useEffect } from 'react';
-import AddPositionDialog from './AddPositionDialog'
+import AddPositionDialog from '../form/AddPositionDialog';
 import axios from "axios";
 
 // const kBaseURL='http://localhost:8000';
@@ -12,8 +12,9 @@ const kBaseURL = import.meta.env.VITE_API_URL;
 
 
 // UPDATE BUTTON COLORS FOR CREATING NEW EMPLOYEE FORM & CHECK TEXT COLORS!!
+// ADD onADD feature and additional prop.
 
-const Form = ({ user }) => {
+const CreateEmployee = ({ user, onAdd }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const [positions, setPositions] = useState([]);
   const [showAddPosition, setShowAddPosition] = useState(false);
@@ -48,6 +49,9 @@ const Form = ({ user }) => {
         contact: values.email, 
         position_id: values.position, 
       }, { headers });
+      if (onAdd) {
+        onAdd(response.data); 
+      }
       console.log("Form submitted successfully:", response.data);
       const username = response.data.username;
       alert(`Employee created! Their username is: ${username}`);
@@ -182,4 +186,4 @@ const initialValues = {
   position: "",
 };
 
-export default Form;
+export default CreateEmployee;

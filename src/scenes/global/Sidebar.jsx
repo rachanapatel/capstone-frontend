@@ -11,6 +11,7 @@ import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import TimelineOutlinedIcon from '@mui/icons-material/TimelineOutlined';
 
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
@@ -91,6 +92,7 @@ const Sidebar = ({ user }) => {
               <>
               <Item title="New Member" to="/team/employees/new" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />
               <Item title="New Position" to="/team/positions/new" icon={<PersonOutlinedIcon />} selected={selected} setSelected={setSelected} />
+
               </>
             )}
 
@@ -100,6 +102,7 @@ const Sidebar = ({ user }) => {
             </Typography>
             
             <Item title="View Templates" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} />
+            <Item title="History" to="/archive" icon={<TimelineOutlinedIcon />} selected={selected} setSelected={setSelected}/>
 
           </Box>
         </Menu>

@@ -2,8 +2,8 @@
 // import { useNavigate } from 'react-router-dom';
 // import axios from 'axios';
 
-const kBaseURL='http://localhost:8000';
-// const kBaseURL = 'https://ets-trial-backend.onrender.com';
+// const kBaseURL='http://localhost:8000';
+const kBaseURL = import.meta.env.VITE_API_URL;
 
 // const Login = ({ setUser }) => {
 //   const [username, setUsername] = useState('');
@@ -95,7 +95,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import Alert from "@mui/material/Alert"; // Updated import
+import Alert from "@mui/material/Alert"; 
 
 const MadeWithLove = () => (
   <Typography variant="body2" color="textSecondary" align="center">
@@ -149,7 +149,7 @@ const SignInSide = ({ setUser }) => {
       <Grid item xs={false} sm={4} md={7} sx={{ backgroundImage: "url(https://coolbackgrounds.imgix.net/2ZNzi2Wk9hFtClSONLBumr/57c308a9090ef211ef017737933c755b/blue-gradient-background.png?w=3840&q=60&auto=format,compress)", backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center" }} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <Box sx={{ margin: 8, display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Avatar sx={{ margin: 1, backgroundColor: "secondary.main" }}>
+          <Avatar sx={{ margin: 1, backgroundColor: "error.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">

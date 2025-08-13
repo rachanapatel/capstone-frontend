@@ -4,7 +4,8 @@ import ShiftForm from './ShiftForm';
 import { useEffect } from 'react';
 import axios from 'axios';
 
-const kBaseURL = 'http://localhost:8000';
+// const kBaseURL = 'http://localhost:8000';
+const kBaseURL = import.meta.env.VITE_API_URL;
 
 function EventDetailModal({ open, eventData, onClose, onUpdate, onDelete, user }) {
   const [isEditing, setIsEditing] = useState(false);

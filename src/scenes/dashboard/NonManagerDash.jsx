@@ -12,8 +12,8 @@ import ShiftForm from './ShiftForm';
 import EventDetail from './EventDetail'
 import './index.css';
 
-const kBaseURL='http://localhost:8000';
-// const kBaseURL = 'https://ets-trial-backend.onrender.com';
+// const kBaseURL='http://localhost:8000';
+const kBaseURL = import.meta.env.VITE_API_URL;
 
 const NonManagerDash = ({ user }) => {
     const [currentEvents, setCurrentEvents] = useState([]);

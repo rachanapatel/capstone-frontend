@@ -1,0 +1,91 @@
+/* Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Fill the full browser window */
+.homepage-container {
+  font-family: sans-serif;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: #f9f9f9;
+}
+
+/* Top-right header buttons */
+.homepage-header {
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+  display: flex;
+  gap: 1rem;
+}
+
+/* Centered main content */
+.homepage-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Text styling */
+.homepage-main h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.homepage-main p {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 2rem;
+}
+
+/* Buttons */
+.btn {
+  padding: 0.6rem 1.4rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 2px solid #007bff;
+  border-radius: 5px;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Filled (blue) */
+.btn-filled {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-filled:hover {
+  /* background-color: #0018b3; */
+  color: #e6f0ff;
+  background-color: #0056b3;
+  border: 2px solid #0056b3;
+}
+
+/* Outline (white background, blue text) */
+.btn-outline {
+  background-color: white;
+  color: #007bff;
+}
+
+.btn-outline:hover {
+  color: #e6f0ff;
+  background-color: #0056b3;
+  border: 2px solid #0056b3;
+}
+
+/* CTA Button spacing */
+.main-cta {
+  margin-top: 1rem;
+}

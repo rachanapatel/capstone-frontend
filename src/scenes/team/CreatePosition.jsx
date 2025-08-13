@@ -2,7 +2,7 @@ import { Box, Button, TextField } from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import Pagetitles from "../Pagetitles";
+import Pagetitles from "../../Pagetitles";
 import axios from "axios";
 import { useEffect } from 'react';
 

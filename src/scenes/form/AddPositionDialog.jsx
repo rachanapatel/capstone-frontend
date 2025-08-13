@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, } from "@mui/material";
   
-const kBaseURL='http://localhost:8000';
-// const kBaseURL = 'https://ets-trial-backend.onrender.com';
+// const kBaseURL='http://localhost:8000';
+const kBaseURL = import.meta.env.VITE_API_URL;
 
   const AddPositionDialog = ({ user, onClose, onPositionCreated }) => {
     const [title, setTitle] = useState("");

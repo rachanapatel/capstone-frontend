@@ -10,9 +10,8 @@
 
 
 // // IGNORE
-// // const kBaseURL='http://127.0.0.1:5000';
-// const kBaseURL='http://localhost:8000';
-// // const kBaseURL = 'https://ets-trial-backend.onrender.com';
+
+const kBaseURL = import.meta.env.VITE_API_URL;
 
 // const Team = ({ user }) => {
 //   const theme = useTheme();
@@ -190,8 +189,7 @@
 // export default Team;
 
 import React, { useState } from 'react';
-import {
-  Dialog,
+import { Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
@@ -226,7 +224,7 @@ function PositionDetail({ open, positionData, onClose, onUpdate, onDelete, user 
     try {
       const headers = { 'X-Company-ID': user.company };
       const response = await axios.put(
-        `http://localhost:8000/team/positions/${position.id}/`,
+        `${kBaseURL}/team/positions/${position.id}/`,
         position,
         { headers }
       );
@@ -244,7 +242,7 @@ function PositionDetail({ open, positionData, onClose, onUpdate, onDelete, user 
 
     try {
       const headers = { 'X-Company-ID': user.company };
-      await axios.delete(`http://localhost:8000/team/positions/${position.id}/`, { headers });
+      await axios.delete(`${kBaseURL}/team/positions/${position.id}/`, { headers });
       onDelete(position.id);
     } catch (error) {
       console.error('Error deleting position:', error);

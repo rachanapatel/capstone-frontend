@@ -14,11 +14,10 @@ import Login from './scenes/landing/Login';
 import CompanyRegistration from './scenes/landing/CompanyRegistration';
 import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import PastShiftsTable from './scenes/PastShiftsTable';
 
-// export const URL = 'https://ets-trial-backend.onrender.com';
-// const kBaseURL='http://127.0.0.1:5000';
-const kBaseURL = 'https://ets-trial-backend.onrender.com';
-
+// const kBaseURL = 'https://ets-trial-backend.onrender.com';
+// const kBaseURL = import.meta.env.VITE_API_URL;
 
 const NoAccess = () => (
   <div style={{ color: 'red', padding: '20px', textAlign: 'center' }}>
@@ -33,7 +32,6 @@ const ComingSoon = () => (
 
 
 function App() {
-  // Load user from localStorage (if any)
   const [user, setUser] = useState(() => {
     const saved = localStorage.getItem('user');
     return saved ? JSON.parse(saved) : null;
@@ -41,7 +39,6 @@ function App() {
 
   const [isSidebar, setIsSidebar] = useState(true);
 
-  // Route guard for protected pages
   const RequireAuth = ({ children }) => {
     return user ? children : <Navigate to="/login" replace />;
   };
@@ -78,6 +75,10 @@ function App() {
               <Route path="/team/positions/new" element={user?.is_manager ? (
                 <RequireAuth><PositionForm user={user} /></RequireAuth>) : (<NoAccess />)} />                            
               <Route path="/calendar" element={<ComingSoon />} />
+              {/* <Route path="/archive" element={<ComingSoon />} /> */}
+              <Route path="/archive" element={
+                <RequireAuth><PastShiftsTable user={user} /></RequireAuth>
+              } />
               <Route path="*" element={<Navigate to="/dash" />} />
             </Routes>
           </main>

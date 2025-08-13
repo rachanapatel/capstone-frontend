@@ -12,8 +12,9 @@ import ShiftForm from './ShiftForm';
 import EventDetail from './EventDetail'
 import './index.css';
 
-const kBaseURL='http://localhost:8000';
-// const kBaseURL = 'https://ets-trial-backend.onrender.com';
+// const kBaseURL='http://localhost:8000';
+const kBaseURL = import.meta.env.VITE_API_URL;
+
 
 const Dashboard = ({ user }) => {
   const [currentEvents, setCurrentEvents] = useState([]);
@@ -21,69 +22,51 @@ const Dashboard = ({ user }) => {
   const [selectedDateInfo, setSelectedDateInfo] = useState(null);
   const [eventDetailData, setEventDetailData] = useState(null);
   const [showEventDetail, setShowEventDetail] = useState(false);
+  const [positionMap, setPositionMap] = useState({});
+  const [employeeMap, setEmployeeMap] = useState([]);
 
-
-const savedUser = JSON.parse(localStorage.getItem('user'));
+  const savedUser = JSON.parse(localStorage.getItem('user'));
   console.log("User from localStorage:", savedUser);
   console.log("User's Position:", savedUser.position);
+  console.log("another test")
 
+  useEffect(() => {
+    const fetchPositions = async () => {
+      try {
+        const headers = { 'X-Company-ID': user.company };
+        const res = await axios.get(`${kBaseURL}/team/positions/`, { headers });
+        const map = {};
+        res.data.forEach(pos => {
+          map[pos.id] = pos.title;
+        });
+        setPositionMap(map);
+        console.log("Employee Map:", map);
+      } catch (error) {
+        console.error("Failed to fetch positions", error);
+      }
+    };
+    fetchPositions();
+  }, []);
 
-  // useEffect(() => {
-  //   async function fetchEvents() {
-  //     try {
-  //       const headers = { 'X-Company-ID': user.company };
-  //       const response = await axios.get("http://localhost:8000/dash/", { headers });
-  
-  //       const events = response.data.map(shift => ({
-  //         id: shift.id,
-  //         title: shift.position?.title || 'No Position',
-  //         start: shift.starttime,
-  //         end: new Date(new Date(shift.starttime).getTime() + parseDurationToMs(shift.duration)).toISOString(),
-  //         allDay: false, 
-  //         extendedProps: {
-  //           shiftStatus: shift.status,
-  //           recurring: shift.recurring,
-  //           position: shift.position?.id,
-  //           employee: shift.employee?.id,
-  //         }
-  //       }));
-        
-  //       setCurrentEvents(events);
-  //     } catch (error) {
-  //       console.error("Error fetching events:", error);
-  //     }
-  //   }
-  
-  //   fetchEvents();
-  // }, [user.company]);
-  // useEffect(() => {
-  //   async function fetchEvents() {
-  //     try {
-  //       const headers = { 'X-Company-ID': user.company };
-  //       const response = await axios.get("http://localhost:8000/dash/", { headers });
-  
-  //       const events = response.data.map(shift => ({
-  //         id: shift.id,
-  //         title: shift.position?.title || 'No Position',
-  //         start: shift.starttime,
-  //         end: new Date(new Date(shift.starttime).getTime() + parseDurationToMs(shift.duration)).toISOString(),
-  //         allDay: false, 
-  //         extendedProps: {
-  //           shiftStatus: shift.status,
-  //           recurring: shift.recurring,
-  //           position: shift.position,  // Include the full position object
-  //           employee: shift.employee?.id,
-  //         }
-  //       }));
-  //       setCurrentEvents(events);
-  //     } catch (error) {
-  //       console.error("Error fetching events:", error);
-  //     }
-  //   }
-  
-  //   fetchEvents();
-  // }, [user.company]);
-  
+  useEffect(() => {
+    async function fetchEmployees() {
+      try {
+        const headers = { 'X-Company-ID': user.company };
+        const response = await axios.get(`${kBaseURL}/team/employees/`, { headers });
+        const map = {};
+        console.log("Fetched employees:", response.data);
+        response.data.forEach(emp => {
+          map[emp.id] = emp.name;
+        });
+        setEmployeeMap(map);
+        console.log("Employee Map:", map);
+      } catch (error) {
+        console.error("Failed to fetch employees", error);
+      }
+    }
+    fetchEmployees();
+  }, []);
+    
   useEffect(() => {
     async function fetchEvents() {
       try {
@@ -109,12 +92,14 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
               shiftStatus: shift.status,
               recurring: shift.recurring,
               position,  // Now position is the full object
-              employee: shift.employee?.id,
+              // employee: shift.employee?.id,
+              employee: shift.employee || null,
             }
           };
         }));
   
         setCurrentEvents(events);
+        console.log("Event object:", events);
       } catch (error) {
         console.error("Error fetching events:", error);
       }
@@ -123,16 +108,13 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
     fetchEvents();
   }, [user.company]);
   
-
-
   function parseDurationToMs(durationStr) {
-    const match = durationStr.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
-    if (!match) return 0;
-  
-    const hours = parseInt(match[1] || '0', 10);
-    const minutes = parseInt(match[2] || '0', 10);
-    const seconds = parseInt(match[3] || '0', 10);
-  
+    // Assumes durationStr is "HH:MM:SS"
+    const parts = durationStr.split(':');
+    if (parts.length !== 3) return 0;
+    const hours = parseInt(parts[0], 10);
+    const minutes = parseInt(parts[1], 10);
+    const seconds = parseInt(parts[2], 10);
     return ((hours * 60 + minutes) * 60 + seconds) * 1000;
   }
   
@@ -147,10 +129,10 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
   const handleCreateEvent = async (formData) => {
     const calendarApi = selectedDateInfo.view.calendar;
     calendarApi.unselect();
-
+  
     const startISO = selectedDateInfo.startStr;
     const endISO = selectedDateInfo.endStr;
-
+  
     try {
       const headers = { 'X-Company-ID': user.company };
       const res = await axios.post(`${kBaseURL}/dash/`, {
@@ -161,31 +143,35 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
         position: formData.position,
         employee: formData.employee || null,
       }, { headers });
-
+  
+      const shift = res.data;
+  
       const newEvent = {
-        id: res.data.id,
-        title: formData.position,
+        id: shift.id,
+        // title: `${shift.position.title}${shift.employee ? ` - ${shift.employee.name}` : ''}`,
+        title: positionMap[formData.position] || `Position ${formData.position}`,
         start: startISO,
         end: endISO,
         allDay: selectedDateInfo.allDay,
         extendedProps: {
-          shiftStatus: formData.shiftStatus,
-          recurring: formData.recurring,
-          position: formData.position,
-          employee: formData.employee || null,
+          shiftStatus: shift.status,
+          recurring: shift.recurring,
+          position: shift.position,
+          employee: shift.employee || null,
         },
       };
-
+  
       calendarApi.addEvent(newEvent);
       setCurrentEvents(prev => [...prev, newEvent]);
+  
     } catch (error) {
       console.error("Error saving shift:", error);
       alert("Failed to save shift to backend.");
     }
-
+  
     setShowForm(false);
   };
-
+  
 
   function calculateDuration(start, end) {
     const startDate = new Date(start);
@@ -235,7 +221,8 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
         if (evt.id === updatedData.id) {
           return {
             ...evt,
-            title: updatedData.position,
+            // title: updatedData.position,
+            title: positionMap[updatedData.position] || `Position ${updatedData.position}`,
             extendedProps: {
               ...evt.extendedProps,
               shiftStatus: updatedData.shiftStatus,
@@ -269,6 +256,13 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
       alert('Failed to delete shift');
     }
   };
+  const today = new Date();
+
+  const upcomingEvents = currentEvents
+            .filter(event => new Date(event.start) >= today)
+            .sort((a, b) => new Date(a.start) - new Date(b.start))
+            .slice(0, 10);  
+
 
   return (
     <Box className="calendar-container">
@@ -277,25 +271,36 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
 
         {/* CALENDAR SIDEBAR */}
         <Box className="calendar-sidebar">
-          <Typography variant="h5">Shifts</Typography>
+          <Typography variant="h5">Upcoming</Typography>
           <List>
-            {currentEvents.map((event) => (
+            {upcomingEvents.map((event) => (
               <ListItem key={event.id} className="calendar-event">
                 <ListItemText
-                  primary={event.title}
-                  secondary={"word"
-                    // <Typography>
-                    //   {formatDate(event.start, {
-                    //     year: "numeric",
-                    //     month: "short",
-                    //     day: "numeric",
-                    //   })}
-                    // </Typography>
+                  primary={`${positionMap[event.position] || event.title} - ${employeeMap[event.extendedProps.employee] || 'Unassigned'}`}
+                  secondary={
+                    <Typography>
+                      {formatDate(event.start, {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                      {": "}
+                      {new Date(event.start).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                      {" - "}
+                      {new Date(event.end).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </Typography>
                   }
                 />
               </ListItem>
             ))}
           </List>
+
         </Box>
 
         {/* CALENDAR */}
