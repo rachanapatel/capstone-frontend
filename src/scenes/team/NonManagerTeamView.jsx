@@ -15,7 +15,7 @@ import Form from '../form/index';
 import CreateEmployee from "./CreateEmployee";
 
 const kBaseURL = import.meta.env.VITE_API_URL;
-const Team = ( {user} ) => {
+const NonManagerTeamView = ( {user} ) => {
   const theme = useTheme();
   const [teamData, setTeamData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null); // For the menu
@@ -141,15 +141,15 @@ const Team = ( {user} ) => {
 
 
         {/* keep links to the add emp/pos pages ?? reformat to be pretty */}
-        <div>
+        {/* <div>
           <Box mb={2}>
           <Link to="/team/employees/new">Add Employee</Link> | 
           <Link to="/team/positions/new">Add Position</Link>
           </Box>
-        </div>
+        </div> */}
 
       <Box mb={2}>
-      <>
+      {/* <>
       <button onClick={handleOpenPositionForm}>➕ Position</button>
       <Dialog
         open={showPositionFormModal}
@@ -173,35 +173,7 @@ const Team = ( {user} ) => {
         </DialogContent>
       </Dialog>
     </>
-
-    {/* <>
-      <button onClick={handleOpenNewEmployeeForm}>Add Employee</button>
-      <Dialog
-        open={showNewEmployeeForm}
-        onClose={handleCloseNewEmployeeForm}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>
-          Create New Employee
-          <IconButton
-            aria-label="close"
-            onClick={handleCloseNewEmployeeForm}
-            sx={{ position: "absolute", right: 8, top: 8 }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-
-        <DialogContent>
-          <Form user={user} />
-        </DialogContent>
-      </Dialog>
-    </> */}
-
-{/* see sep component new BELOW */}
-
-<>
+    <>
       <button onClick={handleOpenNewEmployeeForm}>➕  Employee </button>
       <Dialog
         open={showNewEmployeeForm}
@@ -225,7 +197,7 @@ const Team = ( {user} ) => {
           onAdd={handleAddEmployee}/>
         </DialogContent>
       </Dialog>
-    </>
+    </> */}
 
     </Box> 
 
@@ -291,4 +263,4 @@ const Team = ( {user} ) => {
   );
 };
 
-export default Team;
+export default NonManagerTeamView;

@@ -1,5 +1,11 @@
 .sidebar .pro-sidebar-inner {
     background: var(--sidebar-bg) !important;
+    /* position: fixed;  */
+    overflow-y: auto; 
+    z-index: 1000; 
+    top: 0;
+    left: 0;
+    height: 100vh; 
   }
   
   .sidebar .pro-icon-wrapper {
@@ -75,5 +81,17 @@
   .section-title {
     color: var(--text-secondary);
     margin: 15px 0 5px 20px;
+  }
+  
+  .sidebar {
+    /* position: fixed; */
+    top: 0;
+    left: 0;
+    height: 100vh;      
+    /* Full viewport height */
+    /* width: 250px;        */
+    /* Or whatever your sidebar width is */
+    overflow-y: auto;   /* Scroll internally if content exceeds height */
+    z-index: 1000;      /* Keep it on top if needed */
   }
   

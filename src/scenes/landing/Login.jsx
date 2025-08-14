@@ -144,7 +144,11 @@ const SignInSide = ({ setUser }) => {
   };
 
   return (
-    <Grid container component="main" sx={{ height: "100vh", fontFamily: 'sans-serif', textAlign: 'center' }}>
+    <Grid container component="main" sx={{ 
+      // height: "100vh", 
+      paddingTop: "40px",
+      // alignItems: "center",
+    fontFamily: 'sans-serif', textAlign: 'center', justifyContent: "center"}}>
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} sx={{ backgroundImage: "url(https://coolbackgrounds.imgix.net/2ZNzi2Wk9hFtClSONLBumr/57c308a9090ef211ef017737933c755b/blue-gradient-background.png?w=3840&q=60&auto=format,compress)", backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center" }} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
@@ -211,7 +215,7 @@ const SignInSide = ({ setUser }) => {
               </Grid>
             </Grid>
             <Box mt={5}>
-              <MadeWithLove />
+              {/* <MadeWithLove /> */}
             </Box>
           </form>
         </Box>

@@ -212,8 +212,10 @@ const CompanyRegistration = () => {
         )}
 
         <Box component="form" noValidate onSubmit={handleRegister} sx={{ mt: 3, width: '100%' }}>
-          <Grid container spacing={2} sx={{ border: '1px solid blue' }}>
-            <Grid item xs={12} sx={{ border: '1px solid red'}}>
+          <Grid container spacing={2} 
+          // sx={{ border: '1px solid blue' }}
+          >
+            <Grid item xs={12} sx={{ width: '100%'}}>
               <TextField
                 fullWidth
                 label="Company Name"
@@ -223,7 +225,7 @@ const CompanyRegistration = () => {
                 helperText={errors.companyName}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ width: '100%'}}>
               <TextField
                 fullWidth
                 label="Manager Name"
@@ -233,7 +235,7 @@ const CompanyRegistration = () => {
                 helperText={errors.managerName}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ width: '100%'}}>
               <TextField
                 fullWidth
                 label="Username"
@@ -243,7 +245,7 @@ const CompanyRegistration = () => {
                 helperText={errors.managerUsername}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ width: '100%'}}>
               <TextField
                 fullWidth
                 type="password"

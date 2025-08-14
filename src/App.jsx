@@ -15,6 +15,8 @@ import CompanyRegistration from './scenes/landing/CompanyRegistration';
 import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import PastShiftsTable from './scenes/PastShiftsTable';
+import NonManagerTeamView from './scenes/team/NonManagerTeamView';
+import NonManagerPastShifts from './scenes/NonManagerPastShifts';
 
 // const kBaseURL = 'https://ets-trial-backend.onrender.com';
 // const kBaseURL = import.meta.env.VITE_API_URL;
@@ -58,27 +60,43 @@ function App() {
       {/* PRIVATE ROUTES (for logged-in users) */}
       {user && (
         <div className="app-layout">
-          <Header user={user} setUser={setUser} />
           {isSidebar && <Sidebar user={user} />}
           <main className="main-content">
+            <Header user={user} setUser={setUser} setIsSidebar={setIsSidebar}/>
             <Routes>
               <Route path="/dash" element={
                   <RequireAuth>{user.is_manager ? <Dashboard user={user} /> : 
                   <NonManagerDash user={user} />}</RequireAuth>
                 } 
               />
-              <Route path="/team" element={
+
+              {/* <Route path="/team" element={
                 <RequireAuth><Team user={user} /></RequireAuth>
-              } />
+              } /> */}
+
+              <Route path="/team" element={
+                  <RequireAuth>{user.is_manager ? <Team user={user} /> : 
+                  <NonManagerTeamView user={user} />}</RequireAuth>
+                } 
+              />
+              
               <Route path="/team/employees/new" element={user?.is_manager ? (
                 <RequireAuth><Form user={user} /></RequireAuth>) : (<NoAccess />)} /> 
               <Route path="/team/positions/new" element={user?.is_manager ? (
                 <RequireAuth><PositionForm user={user} /></RequireAuth>) : (<NoAccess />)} />                            
               <Route path="/calendar" element={<ComingSoon />} />
               {/* <Route path="/archive" element={<ComingSoon />} /> */}
-              <Route path="/archive" element={
+              {/* <Route path="/archive" element={
                 <RequireAuth><PastShiftsTable user={user} /></RequireAuth>
-              } />
+              } /> */}
+              <Route path="/archive" element={
+                  <RequireAuth>{user.is_manager ? <PastShiftsTable user={user} /> : 
+                  <NonManagerPastShifts user={user} />}</RequireAuth>
+                } 
+              />
+
+
+
               <Route path="*" element={<Navigate to="/dash" />} />
             </Routes>
           </main>
@@ -89,3 +107,4 @@ function App() {
 }
 
 export default App;
+

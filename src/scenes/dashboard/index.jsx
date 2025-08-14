@@ -40,7 +40,7 @@ const Dashboard = ({ user }) => {
           map[pos.id] = pos.title;
         });
         setPositionMap(map);
-        console.log("Employee Map:", map);
+        console.log("Position Map:", map);
       } catch (error) {
         console.error("Failed to fetch positions", error);
       }
@@ -91,8 +91,7 @@ const Dashboard = ({ user }) => {
             extendedProps: {
               shiftStatus: shift.status,
               recurring: shift.recurring,
-              position,  // Now position is the full object
-              // employee: shift.employee?.id,
+              position,  
               employee: shift.employee || null,
             }
           };

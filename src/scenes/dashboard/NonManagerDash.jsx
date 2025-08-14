@@ -8,68 +8,124 @@ import listPlugin from "@fullcalendar/list";
 import { Box, List, ListItem, ListItemText, Typography } from "@mui/material";
 import Pagetitles from "../../Pagetitles";
 import axios from "axios"; 
-import ShiftForm from './ShiftForm';
-import EventDetail from './EventDetail'
+// import ShiftForm from './ShiftForm';
+import NonManagerShiftForm from './NonManagerShiftForm';
+// import EventDetail from './EventDetail'
+import NonManagerDetail from './NonManagerDetail'
 import './index.css';
 
-// const kBaseURL='http://localhost:8000';
+
 const kBaseURL = import.meta.env.VITE_API_URL;
 
-const NonManagerDash = ({ user }) => {
-    const [currentEvents, setCurrentEvents] = useState([]);
-    const [showForm, setShowForm] = useState(false);
-    const [selectedDateInfo, setSelectedDateInfo] = useState(null);
-    const [eventDetailData, setEventDetailData] = useState(null);
-    const [showEventDetail, setShowEventDetail] = useState(false);
-  
-    
-    const savedUser = JSON.parse(localStorage.getItem('user'));
-    const userId = savedUser ? savedUser.id : user.id;  
-  
-    console.log("User from localStorage:", savedUser);
-    console.log("User's Position:", savedUser?.position);
-  
-    useEffect(() => {
-      async function fetchEvents() {
-        try {
-          const headers = { 'X-Company-ID': user.company };
-          const response = await axios.get(`${kBaseURL}/dash/`, { headers });
-          const events = response.data
-            .filter(shift => shift.employee?.id === userId)  
-            .map(shift => ({
-              id: shift.id,
-              title: shift.position?.title || 'No Position',
-              start: shift.starttime,
-              end: new Date(new Date(shift.starttime).getTime() + parseDurationToMs(shift.duration)).toISOString(),
-              allDay: false, 
-              extendedProps: {
-                shiftStatus: shift.status,
-                recurring: shift.recurring,
-                position: shift.position?.id,
-                employee: shift.employee?.id,
-              }
-            }));
-  
-          setCurrentEvents(events);
-        } catch (error) {
-          console.error("Error fetching events:", error);
-        }
-      }
-  
-      fetchEvents();
-    }, [user.company, userId]);
 
+const NonManagerDash = ({ user }) => {
+  const [currentEvents, setCurrentEvents] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [selectedDateInfo, setSelectedDateInfo] = useState(null);
+  const [eventDetailData, setEventDetailData] = useState(null);
+  const [showEventDetail, setShowEventDetail] = useState(false);
+  const [positionMap, setPositionMap] = useState({});
+  const [employeeMap, setEmployeeMap] = useState([]);
+
+  const savedUser = JSON.parse(localStorage.getItem('user'));
+  const userId = savedUser ? savedUser.id : user.id; 
+  console.log("User from localStorage:", savedUser);
+  console.log("User's Position:", savedUser.position);
+  console.log("user id", userId)
+
+  
+  // console.log("User from localStorage:", savedUser);
+  console.log("User's Position here:", savedUser?.position);
+
+
+  useEffect(() => {
+    const fetchPositions = async () => {
+      try {
+        const headers = { 'X-Company-ID': user.company };
+        const res = await axios.get(`${kBaseURL}/team/positions/`, { headers });
+        const map = {};
+        res.data.forEach(pos => {
+          map[pos.id] = pos.title;
+        });
+        setPositionMap(map);
+        console.log("Position Map:", map);
+      } catch (error) {
+        console.error("Failed to fetch positions", error);
+      }
+    };
+    fetchPositions();
+  }, []);
+
+
+
+  useEffect(() => {
+    async function fetchEvents() {
+      try {
+        const headers = { 'X-Company-ID': user.company };
+        const response = await axios.get(`${kBaseURL}/dash/`, { headers });
+  
+        const events = await Promise.all(response.data.map(async (shift) => {
+          let position = shift.position;
+  
+          // If position is just an ID, fetch the full position object
+          if (position && typeof position === 'number') {
+            const positionRes = await axios.get(`${kBaseURL}/team/positions/${position}/`, { headers });
+            position = positionRes.data;
+          }
+  
+          return {
+            id: shift.id,
+            title: position?.title || 'No Position',
+            start: shift.starttime,
+            end: new Date(new Date(shift.starttime).getTime() + parseDurationToMs(shift.duration)).toISOString(),
+            allDay: false, 
+            extendedProps: {
+              shiftStatus: shift.status,
+              recurring: shift.recurring,
+              position,  // Now position is the full object
+              // employee: shift.employee?.id,
+              employee: shift.employee || null,
+            }
+          };
+        }));
+        const filteredEvents = events.filter(event => 
+          // event.extendedProps.employee !== null && 
+          event.extendedProps.employee === user.id
+        );
+        
+        setCurrentEvents(filteredEvents);
+        console.log("Filtered Event object:", filteredEvents);
+  
+        // setCurrentEvents(events);
+        // console.log("Event object:", events);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    }
+  
+    fetchEvents();
+  }, [user.company]);
+  
+
+  
   function parseDurationToMs(durationStr) {
-    const match = durationStr.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
-    if (!match) return 0;
-  
-    const hours = parseInt(match[1] || '0', 10);
-    const minutes = parseInt(match[2] || '0', 10);
-    const seconds = parseInt(match[3] || '0', 10);
-  
+    // Assumes durationStr is "HH:MM:SS"
+    const parts = durationStr.split(':');
+    if (parts.length !== 3) return 0;
+    const hours = parseInt(parts[0], 10);
+    const minutes = parseInt(parts[1], 10);
+    const seconds = parseInt(parts[2], 10);
     return ((hours * 60 + minutes) * 60 + seconds) * 1000;
   }
   
+
+  const handleDateClick = (selected) => {
+    setSelectedDateInfo(selected);
+    // setShowForm(true);
+    setEventDetailData(null);
+    setShowEventDetail(false);
+  };
+
 
   const handleEventClick = async (clickInfo) => {
     const shiftId = clickInfo.event.id;
@@ -93,14 +149,14 @@ const NonManagerDash = ({ user }) => {
 
   const handleUpdateShift = async (updatedData) => {
     try {
-      const headers = { 'X-Company-ID': user.company }; 
+      const headers = { 'X-Company-ID': user.company };
       await axios.put(`${kBaseURL}/dash/${updatedData.id}/`, {
-        // starttime: eventDetailData.starttime, 
-        // duration: eventDetailData.duration,
+        starttime: eventDetailData.starttime, 
+        duration: eventDetailData.duration,
         status: updatedData.shiftStatus,
-        // recurring: updatedData.recurring,
-        // position: updatedData.position,
-        // employee: updatedData.employee || null,
+        recurring: updatedData.recurring,
+        position: updatedData.position,
+        employee: updatedData.employee || null,
       }, { headers });
 
       setCurrentEvents((prevEvents) => prevEvents.map(evt => {
@@ -108,12 +164,13 @@ const NonManagerDash = ({ user }) => {
           return {
             ...evt,
             // title: updatedData.position,
+            title: positionMap[updatedData.position] || `Position ${updatedData.position}`,
             extendedProps: {
               ...evt.extendedProps,
               shiftStatus: updatedData.shiftStatus,
-            //   recurring: updatedData.recurring,
-            //   position: updatedData.position,
-            //   employee: updatedData.employee || null,
+              recurring: updatedData.recurring,
+              position: updatedData.position,
+              employee: updatedData.employee || null,
             }
           };
         }
@@ -128,21 +185,27 @@ const NonManagerDash = ({ user }) => {
     }
   };
 
+  const today = new Date();
+
+  const upcomingEvents = currentEvents
+            .filter(event => new Date(event.start) >= today)
+            .sort((a, b) => new Date(a.start) - new Date(b.start))
+            .slice(0, 10);  
+
 
   return (
     <Box className="calendar-container">
-      <Pagetitles title="Your Schedule" 
-      />
+      <Pagetitles title="View Schedule" subtitle="Shift Scheduler" />
       <Box className="calendar-layout">
 
         {/* CALENDAR SIDEBAR */}
         <Box className="calendar-sidebar">
-          <Typography variant="h5">Events</Typography>
+          <Typography variant="h5">Upcoming</Typography>
           <List>
-            {currentEvents.map((event) => (
+            {upcomingEvents.map((event) => (
               <ListItem key={event.id} className="calendar-event">
                 <ListItemText
-                  primary={event.title}
+                  primary={`${positionMap[event.position] || event.title} - ${employeeMap[event.extendedProps.employee] || 'Unassigned'}`}
                   secondary={
                     <Typography>
                       {formatDate(event.start, {
@@ -150,12 +213,23 @@ const NonManagerDash = ({ user }) => {
                         month: "short",
                         day: "numeric",
                       })}
+                      {": "}
+                      {new Date(event.start).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                      {" - "}
+                      {new Date(event.end).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </Typography>
                   }
                 />
               </ListItem>
             ))}
           </List>
+
         </Box>
 
         {/* CALENDAR */}
@@ -170,27 +244,28 @@ const NonManagerDash = ({ user }) => {
             }}
             initialView="dayGridMonth"
             editable={true}
-            selectable={true}
+            // selectable={true}
             selectMirror={true}
             dayMaxEvents={true}
-            // select={handleDateClick}
+            select={handleDateClick}
             eventClick={handleEventClick}
             events={currentEvents}
           />
 
           {showForm && selectedDateInfo && (
-            <ShiftForm
+            <NonManagerShiftForm
               user={user}
               onClose={() => {
                 setShowForm(false);
                 setSelectedDateInfo(null);
               }}
-              onCreate={handleCreateEvent}
+              onUpdate={handleUpdateShift}
             />
           )}
 
           {showEventDetail && eventDetailData && (
-            <EventDetail
+            <
+            NonManagerDetail
               open={showEventDetail}
               eventData={eventDetailData}
               onClose={handleCloseDetail}

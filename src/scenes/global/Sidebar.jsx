@@ -46,7 +46,7 @@ const Sidebar = ({ user }) => {
             {!isCollapsed && (
               <Box className="menu-header">
                 <Typography variant="h3" className="menu-title">
-                  MENU
+                  {/* MENU  */}
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
