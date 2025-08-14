@@ -11,7 +11,7 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import { useNavigate } from "react-router-dom";
 // import { useContext } from "react";
 // import { useTheme } from "@mui/material/styles"
-// import SearchIcon from '@mui/icons-material/Search';;
+import SearchIcon from '@mui/icons-material/Search';;
 
 
 const Header = ({ setUser }) => {
@@ -33,14 +33,14 @@ const Header = ({ setUser }) => {
       </Box> */}
 
       <Box className="icon-group">
-        <IconButton> <CircleNotificationsIcon /> </IconButton>
-        <IconButton> <CircleNotificationsOutlinedIcon /> </IconButton>
-        <IconButton> <ManageAccountsIcon /> </IconButton>
-        <IconButton> <ManageAccountsOutlinedIcon /></IconButton>
-        <IconButton onClick={handleLogout} title="Log out">
+        {/* <IconButton className="icon"> <CircleNotificationsIcon /> </IconButton> */}
+        <IconButton className="icon"> <CircleNotificationsOutlinedIcon /> </IconButton>
+        {/* <IconButton className="icon"> <ManageAccountsIcon /> </IconButton> */}
+        <IconButton className="icon"> <ManageAccountsOutlinedIcon /></IconButton>
+        <IconButton className="icon" onClick={handleLogout} title="Log out">
           <LogoutIcon />
         </IconButton>
-        <IconButton> <LogoutOutlinedIcon /></IconButton>
+        {/* <IconButton className="icon"> <LogoutOutlinedIcon /></IconButton> */}
       </Box>
     </Box>
   );

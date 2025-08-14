@@ -151,7 +151,10 @@ const CreateEmployee = ({ user, onAdd }) => {
             </Box>
 
             <Box display="flex" justifyContent="end" mt="20px">
-              <Button type="submit" color="secondary" variant="contained">
+              <Button type="submit" 
+              // color="secondary" 
+              style={{ backgroundColor: '#0056b3' }}
+              variant="contained">
                 Create New Employee
               </Button>
             </Box>

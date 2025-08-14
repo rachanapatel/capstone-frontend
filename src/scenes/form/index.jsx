@@ -62,7 +62,10 @@ const Form = ({ user }) => {
 
   return (
     <Box m="20px">
-      <Pagetitles title="CREATE EMPLOYEE" subtitle="Create a New Employee Profile" />
+      <Pagetitles 
+      title="Create Employee" 
+      // subtitle="Create a New Employee Profile" 
+      />
 
       <Formik
         onSubmit={handleFormSubmit}
@@ -147,8 +150,11 @@ const Form = ({ user }) => {
             </Box>
 
             <Box display="flex" justifyContent="end" mt="20px">
-              <Button type="submit" color="secondary" variant="contained">
-                Create New Employee
+              <Button type="submit" 
+              // color="secondary" 
+              style={{ backgroundColor: '#0056b3' }}
+              variant="contained">
+                Submit
               </Button>
             </Box>
 

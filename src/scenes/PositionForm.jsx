@@ -41,7 +41,10 @@ const PositionForm = ({ user }) => {
 
   return (
     <Box m="20px">
-      <Pagetitles title="CREATE POSITION" subtitle="Create a New Position" />
+      <Pagetitles 
+      title="Create Position" 
+      // subtitle="Create New Position" 
+      />
 
       <Formik
         onSubmit={handleFormSubmit}
@@ -80,17 +83,21 @@ const PositionForm = ({ user }) => {
                 sx={{ gridColumn: "span 2" }}
               />
             </Box>
-            <Box display="flex" justifyContent="end" mt="20px">
+            <Box display="flex" 
+            // justifyContent="end" 
+            justifyContent="center" 
+            mt="20px">
               {/* <Button type="submit" color="secondary" variant="contained">
                 Create New Position
               </Button> */}
 
               <Button
               type="submit"
-              color="secondary"
+              // color="secondary"
+              style={{ backgroundColor: '#0056b3' }}
               variant="contained"
               disabled={isSubmitting}> 
-              {isSubmitting ? 'Creating Position...' : 'Create New Position'}
+              {isSubmitting ? 'Creating Position...' : 'Submit'}
               </Button>
 
 

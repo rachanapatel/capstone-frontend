@@ -167,12 +167,14 @@ const columns = [
 
   return (
     <Box p={3}>
-      <Typography variant="h4" gutterBottom>
-        Past Shifts
+      <Typography variant="h3" 
+      gutterBottom
+      >
+        HISTORY
       </Typography>
 
 
-        <Box mb={2} width="200px">
+        <Box mb={2} width="200px" mt={4}>
             <FormControl fullWidth>
               <InputLabel>Date Filter</InputLabel>
               <Select

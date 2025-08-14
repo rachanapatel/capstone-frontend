@@ -265,12 +265,15 @@ const Dashboard = ({ user }) => {
 
   return (
     <Box className="calendar-container">
-      <Pagetitles title="View Schedule" subtitle="Shift Scheduler" />
+      <Pagetitles 
+      title="View Schedule" 
+      // subtitle="Shift Scheduler" 
+      />
       <Box className="calendar-layout">
 
         {/* CALENDAR SIDEBAR */}
-        <Box className="calendar-sidebar">
-          <Typography variant="h5">Upcoming</Typography>
+        <Box className="calendar-sidebar" mb={8}>
+          <Typography variant="h4">Upcoming</Typography>
           <List>
             {upcomingEvents.map((event) => (
               <ListItem key={event.id} className="calendar-event">

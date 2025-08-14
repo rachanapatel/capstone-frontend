@@ -1,4 +1,5 @@
 import { Box, Typography, useTheme, IconButton, Menu, MenuItem } from "@mui/material";
+import { Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { colors } from "../../theme";
 import { Link } from 'react-router-dom';
@@ -120,7 +121,11 @@ const Team = ( {user} ) => {
 
   return (
     <Box m="20px">
-      <Pagetitles title="TEAM" subtitle="Roster" />
+      <Pagetitles 
+      // title="TEAM" 
+      // subtitle="Roster" 
+      title="Team Roster" 
+      />
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -143,14 +148,26 @@ const Team = ( {user} ) => {
         {/* keep links to the add emp/pos pages ?? reformat to be pretty */}
         <div>
           <Box mb={2}>
-          <Link to="/team/employees/new">Add Employee</Link> | 
-          <Link to="/team/positions/new">Add Position</Link>
+          {/* <Link to="/team/employees/new">Add Employee</Link> | 
+          <Link to="/team/positions/new">Add Position</Link> */}
           </Box>
         </div>
 
-      <Box mb={2}>
+      <Box mb={4}
+      display="flex" justifyContent="space-between"
+      >
       <>
-      <button onClick={handleOpenPositionForm}>➕ Position</button>
+      <Button onClick={handleOpenPositionForm}
+      sx={{
+        backgroundColor: '#0056b3', 
+        color: 'white',  
+        '&:hover': {
+          backgroundColor: '#004494', 
+          color: 'white'
+        },
+        padding: '12px 24px',
+      }}
+      >Add Position</Button>
       <Dialog
         open={showPositionFormModal}
         onClose={handleClosePositionForm}
@@ -202,7 +219,17 @@ const Team = ( {user} ) => {
 {/* see sep component new BELOW */}
 
 <>
-      <button onClick={handleOpenNewEmployeeForm}>➕  Employee </button>
+      <Button onClick={handleOpenNewEmployeeForm}
+      sx={{
+        backgroundColor: '#0056b3', 
+        color: 'white',  
+        '&:hover': {
+          backgroundColor: '#004494', 
+          color: 'white'
+        },
+        padding: '12px 24px',
+      }}
+      >Add Employee</Button>
       <Dialog
         open={showNewEmployeeForm}
         onClose={handleCloseNewEmployeeForm}
