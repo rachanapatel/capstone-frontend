@@ -191,32 +191,6 @@ const Team = ( {user} ) => {
       </Dialog>
     </>
 
-    {/* <>
-      <button onClick={handleOpenNewEmployeeForm}>Add Employee</button>
-      <Dialog
-        open={showNewEmployeeForm}
-        onClose={handleCloseNewEmployeeForm}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>
-          Create New Employee
-          <IconButton
-            aria-label="close"
-            onClick={handleCloseNewEmployeeForm}
-            sx={{ position: "absolute", right: 8, top: 8 }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-
-        <DialogContent>
-          <Form user={user} />
-        </DialogContent>
-      </Dialog>
-    </> */}
-
-{/* see sep component new BELOW */}
 
 <>
       <Button onClick={handleOpenNewEmployeeForm}

@@ -139,65 +139,8 @@ const NonManagerTeamView = ( {user} ) => {
         }}
       >
 
-
-        {/* keep links to the add emp/pos pages ?? reformat to be pretty */}
-        {/* <div>
-          <Box mb={2}>
-          <Link to="/team/employees/new">Add Employee</Link> | 
-          <Link to="/team/positions/new">Add Position</Link>
-          </Box>
-        </div> */}
-
       <Box mb={2}>
-      {/* <>
-      <button onClick={handleOpenPositionForm}>➕ Position</button>
-      <Dialog
-        open={showPositionFormModal}
-        onClose={handleClosePositionForm}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>
-          Create New Position
-          <IconButton
-            aria-label="close"
-            onClick={handleClosePositionForm}
-            sx={{ position: "absolute", right: 8, top: 8 }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
 
-        <DialogContent>
-          <PositionForm user={user} />
-        </DialogContent>
-      </Dialog>
-    </>
-    <>
-      <button onClick={handleOpenNewEmployeeForm}>➕  Employee </button>
-      <Dialog
-        open={showNewEmployeeForm}
-        onClose={handleCloseNewEmployeeForm}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>
-          Create New Employee
-          <IconButton
-            aria-label="close"
-            onClick={handleCloseNewEmployeeForm}
-            sx={{ position: "absolute", right: 8, top: 8 }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-
-        <DialogContent>
-          <CreateEmployee user={user} 
-          onAdd={handleAddEmployee}/>
-        </DialogContent>
-      </Dialog>
-    </> */}
 
     </Box> 
 
